@@ -1,0 +1,17 @@
+{% extends "zaklad.html" %}
+{% set aktivni = "prehled" %}
+{% block titulek %}Přehled{% endblock %}
+{% block obsah %}
+<h1>Dobrý den, {{ uzivatel.jmeno }}</h1>
+<div class="karta">
+  <h2>Co tu můžete dělat</h2>
+  <p>Jste přihlášeni jako <strong>{{ NAZVY_ROLI[uzivatel.role] }}</strong>.</p>
+  {% if uzivatel.role == "KLIENT" %}
+  <p>Ptejte se <a href="/asistent">asistenta</a> na pojistné podmínky a na své smlouvy. Odpověď vždy ukáže, z kterého dokumentu a stránky je.</p>
+  {% elif uzivatel.role == "LIKVIDACE" %}
+  <p>Ptejte se <a href="/asistent">asistenta</a> na podmínky a smlouvy všech klientů — odpověď ukáže dokument a stránku. V <a href="/hlaseni">hlášeních škody</a> najdete údaje, které ze skenu vytěžila AI.</p>
+  {% else %}
+  <p>Spravujete dokumenty: pojistné podmínky, smlouvy a hlášení škody. <a href="/dokumenty">Přejít na dokumenty</a>, nebo v nich <a href="/hledani">vyhledávat</a> a ptát se <a href="/asistent">asistenta</a>. U <a href="/hlaseni">hlášení škody</a> uvidíte údaje vytěžené AI i jejich přesnost.</p>
+  {% endif %}
+</div>
+{% endblock %}

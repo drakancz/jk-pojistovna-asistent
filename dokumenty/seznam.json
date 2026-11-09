@@ -1,0 +1,102 @@
+[
+  {
+    "soubor": "01-pojistne-podminky-auto.pdf",
+    "kod": "VPP-AUTO-2026",
+    "nazev": "Pojistné podmínky pro havarijní pojištění vozidel",
+    "typ": "podminky",
+    "pojisteni": "auto",
+    "klient": null,
+    "smlouva": null,
+    "stran": 3
+  },
+  {
+    "soubor": "02-pojistne-podminky-domacnost.pdf",
+    "kod": "VPP-DOM-2026",
+    "nazev": "Pojistné podmínky pro pojištění domácnosti",
+    "typ": "podminky",
+    "pojisteni": "domacnost",
+    "klient": null,
+    "smlouva": null,
+    "stran": 3
+  },
+  {
+    "soubor": "03-pojistne-podminky-cestovni.pdf",
+    "kod": "VPP-CEST-2026",
+    "nazev": "Pojistné podmínky pro cestovní pojištění",
+    "typ": "podminky",
+    "pojisteni": "cestovni",
+    "klient": null,
+    "smlouva": null,
+    "stran": 3
+  },
+  {
+    "soubor": "04-hlaseni-skody-a-informace.pdf",
+    "kod": "INFO-2026",
+    "nazev": "Jak hlásit škodu, stížnosti a ochrana osobních údajů",
+    "typ": "informace",
+    "pojisteni": "obecne",
+    "klient": null,
+    "smlouva": null,
+    "stran": 3
+  },
+  {
+    "soubor": "05-smlouva-1001-auto.pdf",
+    "kod": "SML-1001",
+    "nazev": "Pojistná smlouva č. 1001 – havarijní pojištění vozidla",
+    "typ": "smlouva",
+    "pojisteni": "auto",
+    "klient": "Petra Malá",
+    "smlouva": "1001",
+    "stran": 1
+  },
+  {
+    "soubor": "06-smlouva-1002-domacnost.pdf",
+    "kod": "SML-1002",
+    "nazev": "Pojistná smlouva č. 1002 – pojištění domácnosti",
+    "typ": "smlouva",
+    "pojisteni": "domacnost",
+    "klient": "Petra Malá",
+    "smlouva": "1002",
+    "stran": 1
+  },
+  {
+    "soubor": "07-smlouva-1003-cestovni.pdf",
+    "kod": "SML-1003",
+    "nazev": "Pojistná smlouva č. 1003 – roční cestovní pojištění",
+    "typ": "smlouva",
+    "pojisteni": "cestovni",
+    "klient": "Petra Malá",
+    "smlouva": "1003",
+    "stran": 1
+  },
+  {
+    "soubor": "08-smlouva-1004-auto.pdf",
+    "kod": "SML-1004",
+    "nazev": "Pojistná smlouva č. 1004 – havarijní pojištění vozidla",
+    "typ": "smlouva",
+    "pojisteni": "auto",
+    "klient": "Tomáš Beneš",
+    "smlouva": "1004",
+    "stran": 1
+  },
+  {
+    "soubor": "09-smlouva-1005-domacnost.pdf",
+    "kod": "SML-1005",
+    "nazev": "Pojistná smlouva č. 1005 – pojištění domácnosti",
+    "typ": "smlouva",
+    "pojisteni": "domacnost",
+    "klient": "Tomáš Beneš",
+    "smlouva": "1005",
+    "stran": 1
+  },
+  {
+    "soubor": "10-dodatek-1004-1-auto.pdf",
+    "kod": "DOD-1004-1",
+    "nazev": "Dodatek č. 1 k pojistné smlouvě č. 1004",
+    "typ": "dodatek",
+    "pojisteni": "auto",
+    "klient": "Tomáš Beneš",
+    "smlouva": "1004",
+    "stran": 1
+  }
+]

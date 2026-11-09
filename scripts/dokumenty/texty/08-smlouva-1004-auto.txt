@@ -1,0 +1,50 @@
+@kod: SML-1004
+@nazev: Pojistná smlouva č. 1004 – havarijní pojištění vozidla
+@typ: smlouva
+@pojisteni: auto
+@klient: Tomáš Beneš
+@smlouva: 1004
+
+# Pojistná smlouva č. 1004
+
+Havarijní pojištění vozidla · uzavřena dne 28. 1. 2026
+
+## 1. Smluvní strany
+
+| Pojišťovna | JK pojišťovna, a.s., Na Ukázce 10, 110 00 Praha 1 |
+| Pojistník a pojištěný | Tomáš Beneš, nar. 3. 11. 1979 |
+| Adresa | Vzorová 8, 370 01 České Budějovice |
+| Kontakt | tomas.benes@example.com, +420 600 000 002 |
+
+## 2. Pojištěné vozidlo
+
+| Druh a model | osobní automobil Ford Focus 1.5 EcoBoost |
+| Rok výroby | 2018 |
+| Registrační značka | 3JK 0002 (vymyšlená) |
+| VIN | WF0JK000000001004 (vymyšlený) |
+| Pojistná částka (obvyklá cena v den uzavření) | 260 000 Kč |
+| Dodatečná výbava | žádná |
+
+## 3. Rozsah pojištění
+
+| Varianta | **STANDARD** (podle článku 3 VPP-AUTO-2026) |
+| Územní platnost | Evropa a Turecko |
+| Spoluúčast | **10 % ze škody, nejméně 10 000 Kč** (zvýšená za nižší pojistné); skla 1 000 Kč |
+| Bonus za jízdu bez škod | 0 % (první pojištění) |
+| Řidiči | jen pojistník |
+
+## 4. Pojistné a doba trvání
+
+| Počátek pojištění | 1. 2. 2026 |
+| Doba trvání | neurčitá, pojistné období 1 rok |
+| Roční pojistné | **7 200 Kč** |
+| Splatnost | ročně, vždy k 1. 2. |
+| Způsob placení | převodem, variabilní symbol 1004 |
+
+## 5. Prohlášení a podpisy
+
+Pojistník prohlašuje, že vozidlo je bez poškození a že převzal pojistné podmínky VPP-AUTO-2026 a dokument INFO-2026, které jsou součástí této smlouvy. Na vozidle byl při prohlídce dne 27. 1. 2026 zjištěn drobný škrábanec na zadním nárazníku; škoda na tomto místě není kryta, dokud nebude opravena a znovu prohlédnuta.
+
+V Českých Budějovicích dne 28. 1. 2026
+
+Za JK pojišťovnu, a.s.: Pavel Vzorný, obchodní zástupce · Pojistník: Tomáš Beneš

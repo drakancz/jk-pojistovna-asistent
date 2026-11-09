@@ -1,0 +1,64 @@
+{% extends "zaklad.html" %}
+{% set aktivni = "asistent" %}
+{% block titulek %}Asistent{% endblock %}
+{% block obsah %}
+<h1>Asistent</h1>
+{% if chyba %}<div class="upozorneni chyba" role="alert">{{ chyba }}</div>{% endif %}
+
+<section class="karta" aria-labelledby="nadpis-otazka">
+  <h2 id="nadpis-otazka">{% if uzivatel.role == "KLIENT" %}Zeptejte se na podmínky a své smlouvy{% else %}Zeptejte se na podmínky a smlouvy{% endif %}</h2>
+  {% if zapnuty %}
+  <form method="post" action="/asistent">
+    <input type="hidden" name="csrf" value="{{ sezeni.csrf }}">
+    <label for="otazka">Otázka</label>
+    <input id="otazka" name="otazka" type="text" required maxlength="{{ max_delka }}"
+           value="{{ otazka or '' }}" aria-describedby="napoveda-otazka">
+    <p class="napoveda" id="napoveda-otazka">Odpověď vychází jen z dokumentů a u každé věty ukáže dokument a stránku. Když odpověď v dokumentech není, asistent řekne „nevím“.</p>
+    <div class="akce"><button type="submit" {% if not zbyva.lze %}disabled{% endif %}>Zeptat se</button></div>
+  </form>
+  <p class="tlumene" id="zbyva">Zbývá vám dnes {{ zbyva.ucet }} z {{ zbyva.limit_ucet }} otázek.</p>
+  {% else %}
+  {% if uzivatel.role == "KLIENT" %}
+  <p>Asistent je teď vypnutý. Zkuste to prosím později.</p>
+  {% else %}
+  <p>Asistent je vypnutý — na serveru chybí klíč k Anthropicu. <a href="/hledani">Vyhledávání v dokumentech</a> funguje i bez něj.</p>
+  {% endif %}
+  {% endif %}
+</section>
+
+{% if odpoved %}
+<section class="karta" aria-labelledby="nadpis-odpoved">
+  <h2 id="nadpis-odpoved">Odpověď</h2>
+  <p class="odpoved{% if odpoved.nevim %} nevim{% endif %}" id="odpoved">
+    {%- for cast in odpoved.casti -%}
+      {{ cast.text }}{% for c in cast.zdroje %}<sup><a href="#zdroj-{{ c }}" aria-label="zdroj {{ c }}">[{{ c }}]</a></sup>{% endfor %}
+    {%- endfor -%}
+  </p>
+  {% if odpoved.zdroje %}
+  <h3>Zdroje</h3>
+  <ol class="zdroje">
+    {% for z in odpoved.zdroje %}
+    <li class="zdroj" id="zdroj-{{ z.cislo }}" value="{{ z.cislo }}">
+      <p class="nalez-zdroj">
+        {% if uzivatel.role == "ADMIN" %}<a href="/dokumenty/{{ z.dokument_id }}">{{ z.dokument }}</a>{% else %}<strong>{{ z.dokument }}</strong>{% endif %}
+        · strana {{ z.strana }}{% if z.nadpis %} · {{ z.nadpis }}{% endif %}
+      </p>
+      <p class="text-uryvku">{{ z.text }}</p>
+    </li>
+    {% endfor %}
+  </ol>
+  {% endif %}
+  {% if odpoved.poslane %}
+  <details class="poslane">
+    <summary>Z čeho asistent vybíral ({{ odpoved.poslane|length|uryvku }})</summary>
+    <ul>
+      {% for n in odpoved.poslane %}
+      <li>{{ n.dokument }} · strana {{ n.strana }}{% if n.nadpis %} · {{ n.nadpis }}{% endif %}</li>
+      {% endfor %}
+    </ul>
+  </details>
+  {% endif %}
+  <p class="napoveda">Odpověď napsala AI (Claude Haiku). Zdroje si vždy ověřte.</p>
+</section>
+{% endif %}
+{% endblock %}

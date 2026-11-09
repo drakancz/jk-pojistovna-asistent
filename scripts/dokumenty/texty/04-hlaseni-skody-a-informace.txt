@@ -1,0 +1,93 @@
+@kod: INFO-2026
+@nazev: Jak hlásit škodu, stížnosti a ochrana osobních údajů
+@typ: informace
+@pojisteni: obecne
+
+# Jak hlásit škodu, stížnosti a ochrana osobních údajů
+
+Informace pro klienty JK pojišťovny, a.s. · platné od 1. 1. 2026 · označení INFO-2026
+
+Tento dokument platí pro všechna pojištění JK pojišťovny (havarijní pojištění vozidel, pojištění domácnosti a cestovní pojištění) a doplňuje jejich pojistné podmínky.
+
+## 1. Kontakty
+
+| Kontakt | Údaje |
+|---|---|
+| Klientská linka | +420 200 000 100, v pracovní dny 8–18 h |
+| Asistenční služba (nonstop) | +420 200 000 111 – odtah, cestovní asistence |
+| Hlášení škody online | v klientské části na webu pojišťovny |
+| E-mail pro škody | skody@jk-pojistovna.example |
+| Adresa | JK pojišťovna, a.s., Na Ukázce 10, 110 00 Praha 1 |
+
+## 2. Jak nahlásit škodu – krok za krokem
+
+1. **Zajistěte bezpečí** a zabraňte zvětšování škody (vypněte vodu, zajistěte místo nehody).
+2. **Přivolejte policii**, pokud to podmínky vyžadují – u krádeže vždy, u dopravní nehody se škodou nad 100 000 Kč nebo se zraněním.
+3. **Vyfoťte škodu** ještě před úklidem nebo opravou.
+4. **Nahlaste škodu** online, e-mailem nebo na klientské lince. Uveďte číslo pojistné smlouvy, datum, místo a popis události.
+5. **Doložte podklady** podle tabulky níže. Číslo škody, které vám pošleme, uvádějte ve veškeré korespondenci.
+
+## 3. Lhůty pro oznámení
+
+| Pojištění | Lhůta pro oznámení pojišťovně |
+|---|---|
+| Havarijní pojištění vozidla | do 15 dnů od škody; odcizení policii do 24 hodin |
+| Pojištění domácnosti | do 15 dnů od škody; seznam odcizených věcí do 8 dnů |
+| Cestovní pojištění | do 30 dnů po návratu do ČR |
+
+===
+
+## 4. Jaké podklady připravit
+
+### Havarijní pojištění vozidla
+
+- záznam o dopravní nehodě nebo číslo jednací policie;
+- fotografie poškozeného vozidla a místa nehody;
+- technický průkaz a řidičský průkaz řidiče;
+- při odcizení všechny klíče a potvrzení policie.
+
+### Pojištění domácnosti
+
+- fotografie poškozených věcí a místa škody;
+- doklady o koupi, záruční listy nebo jiný doklad o ceně;
+- u krádeže potvrzení policie a seznam odcizených věcí;
+- u vodovodní škody vyjádření správce domu nebo instalatéra o příčině.
+
+### Cestovní pojištění
+
+- lékařské zprávy a účty za ošetření a léky;
+- doklad o cestě (letenka, potvrzení o zájezdu);
+- u zavazadel protokol od dopravce (PIR) nebo potvrzení policie;
+- u storna potvrzení o zrušení cesty a výši stornopoplatku.
+
+## 5. Jak dlouho to trvá
+
+Pojišťovna ukončí šetření **do 3 měsíců** od oznámení škody. Pokud to nestihne, sdělí vám písemně důvody a na požádání vyplatí přiměřenou zálohu. Plnění vyplatí **do 15 dnů od skončení šetření** na účet, který uvedete.
+
+## 6. Stížnosti
+
+Nejste-li spokojeni, můžete podat stížnost písemně na adresu pojišťovny, e-mailem na stiznosti@jk-pojistovna.example nebo na klientské lince. Stížnost vyřídíme **do 30 dnů** od jejího doručení; ve složitých případech můžeme lhůtu jednou prodloužit o dalších 30 dnů a sdělíme vám proč. Nesouhlasíte-li s vyřízením, můžete se obrátit na orgán dohledu nad pojišťovnictvím nebo na soud.
+
+===
+
+## 7. Ochrana osobních údajů
+
+### Jaké údaje zpracováváme
+
+Jméno, datum narození, adresu, kontaktní údaje, údaje o pojištěném majetku a vozidle, údaje o škodách a u cestovního pojištění i údaje o zdravotním stavu v rozsahu nutném k vyřízení pojistné události.
+
+### Proč
+
+Údaje zpracováváme, abychom mohli uzavřít smlouvu, spravovat pojištění a vyřizovat škody, a dále proto, že nám to ukládá zákon (zejména předpisy o pojišťovnictví a proti praní peněz). Marketingová sdělení posíláme jen se souhlasem, který můžete kdykoli odvolat.
+
+### Jak dlouho
+
+Po dobu trvání pojištění a dále **10 let od jeho zániku**, nebo do skončení posledního šetření či sporu, je-li pozdější.
+
+### Komu je předáváme
+
+Smluvním servisům a likvidátorům, asistenční službě, zajišťovnám, a pokud to vyžaduje zákon, orgánům veřejné moci. Mimo Evropský hospodářský prostor předáváme údaje jen u cestovního pojištění, a to zdravotnickým zařízením v zemi, kde jste byli ošetřeni.
+
+### Vaše práva
+
+Máte právo na přístup ke svým údajům, jejich opravu, výmaz, omezení zpracování, přenositelnost a právo vznést námitku. Žádost můžete poslat na osobni-udaje@jk-pojistovna.example. Odpovíme do jednoho měsíce.

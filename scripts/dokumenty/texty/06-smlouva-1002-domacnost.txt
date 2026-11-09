@@ -1,0 +1,53 @@
+@kod: SML-1002
+@nazev: Pojistná smlouva č. 1002 – pojištění domácnosti
+@typ: smlouva
+@pojisteni: domacnost
+@klient: Petra Malá
+@smlouva: 1002
+
+# Pojistná smlouva č. 1002
+
+Pojištění domácnosti · uzavřena dne 10. 1. 2026
+
+## 1. Smluvní strany
+
+| Pojišťovna | JK pojišťovna, a.s., Na Ukázce 10, 110 00 Praha 1 |
+| Pojistník a pojištěná | Petra Malá, nar. 14. 5. 1988 |
+| Kontakt | petra.mala@example.com, +420 600 000 001 |
+
+## 2. Místo pojištění
+
+| Adresa | Ukázková 15, 602 00 Brno, byt č. 7 ve 3. patře |
+| Druh | byt 3+1 v osobním vlastnictví, 78 m² |
+| Osoby ve společné domácnosti | Petra Malá, Karel Malý |
+| Zabezpečení | **stupeň 2** – bezpečnostní dveře s certifikovaným zámkem (článek 3 VPP-DOM-2026) |
+
+## 3. Rozsah pojištění
+
+| Varianta | **KOMFORT** |
+| Pojistná částka domácnosti | 800 000 Kč (nová cena) |
+| Limit za krádež vloupáním | 500 000 Kč (podle stupně zabezpečení 2) |
+| Odpovědnost v běžném občanském životě | 1 000 000 Kč |
+| Přepětí a zkrat | 30 000 Kč |
+| Spoluúčast | 1 000 Kč; povodeň a záplava 10 000 Kč |
+| Indexace pojistné částky | ano, 3 % ročně |
+
+## 4. Pojistné a doba trvání
+
+| Počátek pojištění | 15. 1. 2026 |
+| Doba trvání | neurčitá, pojistné období 1 rok |
+| Roční pojistné | **2 760 Kč** |
+| Splatnost | ročně, vždy k 15. 1. |
+| Způsob placení | převodem, variabilní symbol 1002 |
+
+## 5. Zvláštní ujednání
+
+Pojištění plynule navazuje na pojištění domácnosti u jiné pojišťovny, které skončilo 14. 1. 2026; čekací doba 10 dní u povodně a záplavy se proto neuplatní. V domácnosti je jízdní kolo v hodnotě 32 000 Kč, které je uloženo v bytě – limit pro kola ve společných prostorách se na něj nevztahuje.
+
+## 6. Podpisy
+
+Pojistník prohlašuje, že převzal pojistné podmínky VPP-DOM-2026 a dokument INFO-2026, které jsou součástí smlouvy.
+
+V Brně dne 10. 1. 2026
+
+Za JK pojišťovnu, a.s.: Jana Ukázková, obchodní zástupkyně · Pojistník: Petra Malá

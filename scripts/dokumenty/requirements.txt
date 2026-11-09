@@ -1,0 +1,5 @@
+# Nástroj na výrobu PDF (jen vývoj). Ověřeno 4. 11. 2026, výstup pip freeze.
+charset-normalizer==3.5.2
+pillow==13.0.0
+pypdf==6.21.4
+reportlab==5.1.0

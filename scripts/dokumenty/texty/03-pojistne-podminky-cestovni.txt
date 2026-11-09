@@ -1,0 +1,103 @@
+@kod: VPP-CEST-2026
+@nazev: Pojistné podmínky pro cestovní pojištění
+@typ: podminky
+@pojisteni: cestovni
+
+# Pojistné podmínky pro cestovní pojištění
+
+Platné pro smlouvy uzavřené od 1. 1. 2026 · označení VPP-CEST-2026
+
+Tyto pojistné podmínky upravují cestovní pojištění u JK pojišťovny, a.s. (dále jen „pojišťovna“). Spolu s pojistnou smlouvou a dokumentem INFO-2026 tvoří obsah pojištění.
+
+## Článek 1 – Komu a kdy pojištění platí
+
+Pojištění platí pro osoby uvedené ve smlouvě během cest **mimo Českou republiku a mimo stát, jehož je pojištěný občanem nebo kde má trvalý pobyt**. Krátkodobé pojištění platí po dobu uvedenou ve smlouvě. **Roční pojištění kryje libovolný počet cest, každou nejvýše 90 dní**; delší část cesty pojištěna není.
+
+Pojištění musí být sjednáno před odjezdem z České republiky. Bylo-li sjednáno až po odjezdu, platí až od 5. dne po sjednání.
+
+## Článek 2 – Územní rozsah
+
+| Oblast | Země |
+|---|---|
+| EVROPA | evropské státy, Turecko, Kypr, Egypt, Tunisko, Maroko |
+| SVĚT | všechny státy světa |
+
+Pojištění neplatí ve státech, pro které Ministerstvo zahraničních věcí ČR v den odjezdu vydalo doporučení „necestujte“ (nejvyšší stupeň varování).
+
+## Článek 3 – Rozsah pojištění a limity
+
+| Pojištění | EVROPA | SVĚT |
+|---|---|---|
+| Léčebné výlohy (ošetření, hospitalizace, léky) | 3 000 000 Kč | 6 000 000 Kč |
+| z toho akutní zubní ošetření | 10 000 Kč | 10 000 Kč |
+| z toho převoz zpět do ČR (repatriace) | v rámci limitu | v rámci limitu |
+| Úraz – smrt | 300 000 Kč | 300 000 Kč |
+| Úraz – trvalé následky | 600 000 Kč | 600 000 Kč |
+| Zavazadla – celkem / za jednu věc | 20 000 Kč / 5 000 Kč | 20 000 Kč / 5 000 Kč |
+| Zpoždění zavazadla o více než 12 hodin | 3 000 Kč | 3 000 Kč |
+| Odpovědnost – škoda na zdraví / na věci | 2 000 000 Kč / 1 000 000 Kč | 4 000 000 Kč / 2 000 000 Kč |
+
+### 3.1 Připojištění
+
+- **SPORT** – rizikové sporty podle článku 5. Bez něj je pojištěno jen běžné rekreační sportování.
+- **STORNO** – úhrada stornopoplatku, když pojištěný nemůže nastoupit cestu (článek 6).
+
+===
+
+## Článek 4 – Léčebné výlohy a asistenční služba
+
+Pojišťovna hradí nezbytné a přiměřené náklady na léčení **náhlého onemocnění nebo úrazu**, které vznikly během cesty, do doby, kdy je pojištěný schopen návratu do ČR.
+
+> Asistenční služba JK pojišťovny je k dispozici nonstop na čísle +420 200 000 111. **Před hospitalizací, převozem nebo ošetřením dražším než 30 000 Kč ji kontaktujte vždy** – jinak může pojišťovna plnění snížit.
+
+Ambulantní ošetření do 30 000 Kč může pojištěný zaplatit sám a náklady uplatnit po návratu. Pojišťovna proplácí doklady v češtině, slovenštině, angličtině, němčině nebo jejich úředně ověřený překlad.
+
+## Článek 5 – Sporty
+
+**Bez připojištění SPORT** jsou pojištěny: turistika po značených cestách do 3 000 m n. m., lyžování a snowboarding na vyznačených sjezdovkách, cyklistika na zpevněných cestách, plavání, šnorchlování a potápění s přístrojem do hloubky 10 m s instruktorem.
+
+**Jen s připojištěním SPORT** jsou pojištěny: lyžování a snowboarding mimo sjezdovky, skialpinismus, vysokohorská turistika nad 3 000 m n. m., horolezectví a via ferraty, potápění s přístrojem do 40 m, rafting, paragliding a horská cyklistika v terénu.
+
+**Pojištěny nejsou nikdy:** potápění hlouběji než 40 m, výpravy nad 7 000 m n. m., motoristické sporty, závodní a profesionální sport.
+
+## Článek 6 – Připojištění STORNO
+
+Pojišťovna uhradí **80 % stornopoplatku, nejvýše 30 000 Kč na osobu**, nemůže-li pojištěný cestu nastoupit z těchto důvodů:
+
+- akutní onemocnění nebo úraz pojištěného, který vyžaduje léčení;
+- úmrtí, hospitalizace nebo vážný úraz osoby blízké;
+- živelní škoda nebo vloupání do domácnosti pojištěného v posledních 7 dnech před odjezdem, je-li nutná jeho přítomnost;
+- ztráta zaměstnání pojištěného výpovědí ze strany zaměstnavatele.
+
+Připojištění STORNO musí být sjednáno nejpozději do 3 dnů po zaplacení zájezdu nebo letenky; sjednané později platí až od 14. dne po sjednání.
+
+## Článek 7 – Výluky: co pojištění nekryje
+
+Pojišťovna neplní:
+
+- za léčení nemocí, které pojištěný měl již před odjezdem (chronické a dlouhodobé nemoci), **nejde-li o jejich náhlé a nepředvídatelné zhoršení**;
+- za léčení, kvůli kterému pojištěný do zahraničí odcestoval, a za plánované zákroky;
+- za péči v souvislosti s těhotenstvím **po 26. týdnu** a za porod;
+- za úrazy a škody pod vlivem alkoholu nebo návykových látek;
+- ve státech podle článku 2 s doporučením „necestujte“ a v oblastech válečného konfliktu;
+- za zavazadla ponechaná bez dozoru nebo ve vozidle přes noc, a za peníze, šperky, doklady a elektroniku podanou jako zapsané zavazadlo;
+- za škody způsobené úmyslně.
+
+===
+
+## Článek 8 – Povinnosti při pojistné události
+
+Pojištěný je povinen:
+
+- v případech podle článku 4 kontaktovat asistenční službu ještě před ošetřením;
+- krádež zavazadel ohlásit místní policii a vyžádat si potvrzení; ztrátu nebo poškození zavazadla u letecké přepravy oznámit dopravci ještě na letišti (protokol PIR);
+- **oznámit pojistnou událost pojišťovně nejpozději do 30 dnů po návratu** do ČR a předložit lékařské zprávy, účty a potvrzení policie či dopravce;
+- zprostit lékaře mlčenlivosti v rozsahu nutném k prošetření.
+
+## Článek 9 – Plnění a doba trvání
+
+Pojišťovna ukončí šetření do 3 měsíců od oznámení a plnění vyplatí do 15 dnů od jeho skončení; zahraničním zdravotnickým zařízením platí přímo, je-li to dohodnuto přes asistenční službu. Roční pojištění se sjednává na dobu neurčitou a lze je vypovědět ke konci pojistného období nejméně 6 týdnů předem. Krátkodobé pojištění zaniká uplynutím sjednané doby nebo návratem do ČR, nastane-li dříve.
+
+## Článek 10 – Závěrečná ustanovení
+
+Práva a povinnosti neupravené těmito podmínkami se řídí občanským zákoníkem. Tyto podmínky nabývají účinnosti dnem 1. 1. 2026.

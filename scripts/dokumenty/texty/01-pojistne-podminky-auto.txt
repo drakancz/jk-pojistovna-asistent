@@ -1,0 +1,127 @@
+@kod: VPP-AUTO-2026
+@nazev: Pojistné podmínky pro havarijní pojištění vozidel
+@typ: podminky
+@pojisteni: auto
+
+# Pojistné podmínky pro havarijní pojištění vozidel
+
+Platné pro smlouvy uzavřené od 1. 1. 2026 · označení VPP-AUTO-2026
+
+Tyto pojistné podmínky upravují havarijní pojištění osobních vozidel u JK pojišťovny, a.s. (dále jen „pojišťovna“). Spolu s pojistnou smlouvou a dokumentem „Jak hlásit škodu, stížnosti a ochrana osobních údajů“ (INFO-2026) tvoří obsah pojištění. Ujednání v pojistné smlouvě mají přednost před těmito podmínkami.
+
+## Článek 1 – Vymezení pojmů
+
+- **Pojistník** – osoba, která uzavřela pojistnou smlouvu a platí pojistné.
+- **Pojištěný** – vlastník nebo provozovatel vozidla uvedeného ve smlouvě.
+- **Pojistná událost** – nahodilá událost, při níž vznikla škoda na vozidle a se kterou je spojena povinnost pojišťovny plnit.
+- **Obvyklá cena** – cena, za kterou by bylo možné vozidlo stejného typu, stáří a stavu koupit v České republice v den škody.
+- **Spoluúčast** – část škody, kterou nese pojištěný sám; odečítá se od každého plnění.
+- **Totální škoda** – stav, kdy by přiměřené náklady na opravu přesáhly 80 % obvyklé ceny vozidla, nebo vozidlo nelze technicky opravit.
+
+## Článek 2 – Předmět pojištění
+
+Pojištěno je vozidlo uvedené v pojistné smlouvě včetně výbavy, se kterou bylo vyrobeno, a výbavy uvedené ve smlouvě. Dodatečná výbava, která ve smlouvě uvedena není, je pojištěna do 10 000 Kč. Za výbavu se nepovažují mobilní telefony, navigace a jiná přenosná elektronika, které nejsou pevně zabudované.
+
+## Článek 3 – Varianty pojištění a pojistná nebezpečí
+
+Pojištění se sjednává ve variantě STANDARD nebo PLUS. Varianta je uvedena v pojistné smlouvě.
+
+| Pojistné nebezpečí | STANDARD | PLUS |
+|---|---|---|
+| Havárie (střet, náraz, pád vozidla) | ano | ano |
+| Živelní událost (požár, vichřice, krupobití, povodeň, pád stromu) | ano | ano |
+| Odcizení celého vozidla nebo jeho části | ano | ano |
+| Vandalismus (úmyslné poškození třetí osobou) | ano | ano |
+| Střet se zvěří | ne | ano |
+| Poškození čelního a ostatních skel | do 5 000 Kč | bez limitu |
+| Poškození kabeláže zvířetem (kuna) | ne | do 20 000 Kč |
+| Náhradní vozidlo po dobu opravy | ne | až 7 dní, nejvýše 1 200 Kč za den |
+| Asistence – odtah | do 50 km | do 200 km |
+
+Střet se zvěří je ve variantě STANDARD vyloučen i tehdy, když je škoda způsobena vyhýbáním se zvěři a k samotnému střetu nedošlo.
+
+===
+
+## Článek 4 – Územní platnost
+
+Pojištění platí na území Evropy v zeměpisném smyslu a v Turecku. Asistenční služby (odtah, náhradní vozidlo) se poskytují jen v zemích Evropské unie, v Norsku, Švýcarsku a na Islandu.
+
+## Článek 5 – Spoluúčast
+
+Není-li ve smlouvě ujednáno jinak, je spoluúčast tato:
+
+| Druh škody | Spoluúčast |
+|---|---|
+| Havárie, živelní událost, vandalismus | 5 % ze škody, nejméně 5 000 Kč |
+| Odcizení celého vozidla | 10 % ze škody, nejméně 10 000 Kč |
+| Poškození skel | 1 000 Kč |
+| Střet se zvěří (jen PLUS) | 5 000 Kč |
+
+Smlouva může stanovit vyšší spoluúčast (například 10 %, nejméně 10 000 Kč) za nižší pojistné. Je-li škoda nižší než spoluúčast, pojišťovna neplní.
+
+## Článek 6 – Výluky: co pojištění nekryje
+
+Pojišťovna neplní za škody:
+
+- způsobené řidičem pod vlivem alkoholu nebo jiné návykové látky, nebo řidičem, který odmítl dechovou zkoušku či lékařské vyšetření;
+- způsobené řidičem bez platného řidičského oprávnění příslušné skupiny;
+- vzniklé při závodech, soutěžích, jízdách na uzavřeném okruhu nebo při výcviku v autoškole;
+- způsobené úmyslně pojištěným nebo osobou blízkou;
+- vzniklé opotřebením, korozí, únavou materiálu nebo nesprávnou údržbou;
+- na pneumatikách, pokud současně nevznikla jiná škoda na vozidle kryté pojištěním;
+- vzniklé válkou, terorismem, vzpourou nebo zásahem státní moci;
+- **odcizením vozidla, v němž byl ponechán klíč, ovladač nebo technický průkaz**, nebo které nebylo uzamčeno.
+
+Pojišťovna dále neplní za ušlý zisk, pokuty, znehodnocení vozidla po opravě ani za náklady na pronájem jiného vozidla nad rámec článku 3.
+
+## Článek 7 – Povinnosti při škodě
+
+Pojištěný je povinen:
+
+- oznámit škodu pojišťovně **bez zbytečného odkladu, nejpozději do 15 dnů** od jejího vzniku (postup v dokumentu INFO-2026);
+- přivolat policii, jestliže škoda na kterémkoli vozidle zjevně přesahuje **100 000 Kč**, došlo ke zranění nebo jde o podezření z trestného činu;
+- **odcizení vozidla nebo jeho části oznámit policii nejpozději do 24 hodin** od zjištění;
+- před opravou umožnit pojišťovně prohlídku poškozeného vozidla; bez souhlasu pojišťovny smí provést jen opravu nezbytnou k bezpečné jízdě;
+- uschovat poškozené díly do skončení šetření;
+- při odcizení vozidla odevzdat pojišťovně všechny klíče a technický průkaz.
+
+Poruší-li pojištěný tyto povinnosti a mělo-li to vliv na rozsah škody nebo na možnost ji prošetřit, může pojišťovna plnění přiměřeně snížit.
+
+===
+
+## Článek 8 – Plnění pojišťovny
+
+### 8.1 Oprava vozidla
+
+Pojišťovna hradí přiměřené náklady na opravu vozidla po odečtení spoluúčasti. Při opravě ve smluvním servisu pojišťovny platí servisu přímo a pojištěný hradí jen spoluúčast. Při opravě jinde hradí náklady nejvýše v cenách obvyklých v místě opravy; u vozidla staršího 5 let může použít díly srovnatelné kvality od jiného výrobce.
+
+### 8.2 Totální škoda a odcizení
+
+Při totální škodě nebo odcizení celého vozidla vyplatí pojišťovna **obvyklou cenu vozidla v den škody, sníženou o cenu použitelných zbytků a o spoluúčast**. Plnění nikdy nepřesáhne pojistnou částku uvedenou ve smlouvě.
+
+### 8.3 DPH
+
+Je-li pojištěný plátcem DPH a může si daň uplatnit, poskytuje se plnění bez DPH.
+
+### 8.4 Splatnost
+
+Pojišťovna ukončí šetření do 3 měsíců od oznámení škody a plnění vyplatí do 15 dnů od skončení šetření.
+
+## Článek 9 – Bonus za jízdu bez škod
+
+Za každý celý rok pojištění bez pojistné události, ze které pojišťovna plnila, získává pojistník slevu (bonus) 5 % z ročního pojistného, nejvýše 30 %. Každá taková pojistná událost sníží bonus o 10 procentních bodů k nejbližšímu výročí smlouvy. Bonus získaný u jiné pojišťovny lze započítat, doloží-li ho pojistník potvrzením.
+
+## Článek 10 – Pojistné, doba trvání a zánik pojištění
+
+- Pojištění se sjednává na dobu neurčitou s ročním pojistným obdobím, není-li ve smlouvě uvedeno jinak.
+- Pojistné je splatné prvním dnem pojistného období. Nezaplatí-li ho pojistník ani do 30 dnů od splatnosti, pojišťovna mu pošle výzvu; pojištění zanikne uplynutím jednoho měsíce od doručení výzvy, pokud pojistné mezitím nebude zaplaceno.
+- Pojistník i pojišťovna mohou pojištění **vypovědět ke konci pojistného období; výpověď musí být doručena nejméně 6 týdnů před jeho koncem**.
+- Do 2 měsíců od uzavření smlouvy ji lze vypovědět s osmidenní výpovědní lhůtou.
+- Do 3 měsíců od oznámení pojistné události lze pojištění vypovědět s měsíční výpovědní lhůtou.
+- Pojištění zaniká také prodejem, sešrotováním nebo odcizením vozidla – dnem, kdy se to pojišťovna dozví.
+
+> Pojistník má právo odstoupit od smlouvy uzavřené na dálku (online nebo telefonem) do 14 dnů od jejího uzavření bez udání důvodu.
+
+## Článek 11 – Závěrečná ustanovení
+
+Práva a povinnosti neupravené těmito podmínkami se řídí občanským zákoníkem. Stížnosti se podávají podle dokumentu INFO-2026. Tyto podmínky nabývají účinnosti dnem 1. 1. 2026.

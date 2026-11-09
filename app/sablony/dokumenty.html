@@ -1,0 +1,100 @@
+{% extends "zaklad.html" %}
+{% set aktivni = "dokumenty" %}
+{% block titulek %}Dokumenty{% endblock %}
+{% block obsah %}
+<h1>Dokumenty</h1>
+{% if zprava %}<div class="upozorneni ok" role="status">{{ zprava }}</div>{% endif %}
+{% if chyba %}<div class="upozorneni chyba" role="alert">{{ chyba }}</div>{% endif %}
+
+{% if ukazka() %}
+<div class="upozorneni ok">Ukázka: dokumenty, jejich přečtený text i úryvky si můžete prohlížet. Nahrávání, mazání a nové čtení jsou vypnuté.</div>
+{% else %}
+<section class="karta" aria-labelledby="nadpis-nahrat">
+  <h2 id="nadpis-nahrat">Nahrát dokument</h2>
+  <form method="post" action="/dokumenty" enctype="multipart/form-data">
+    <input type="hidden" name="csrf" value="{{ sezeni.csrf }}">
+    <div class="mrizka">
+      <div>
+        <label for="nazev">Název</label>
+        <input id="nazev" name="nazev" type="text" required maxlength="200" value="{{ hodnoty.nazev or '' }}">
+      </div>
+      <div>
+        <label for="druh">Druh dokumentu</label>
+        <select id="druh" name="druh" required>
+          <option value="">Vyberte…</option>
+          {% for kod, nazev in NAZVY_DRUHU.items() %}
+          <option value="{{ kod }}" {% if hodnoty.druh == kod %}selected{% endif %}>{{ nazev }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="pojisteni">Pojištění</label>
+        <select id="pojisteni" name="pojisteni" required>
+          <option value="">Vyberte…</option>
+          {% for kod, nazev in NAZVY_POJISTENI.items() %}
+          <option value="{{ kod }}" {% if hodnoty.pojisteni == kod %}selected{% endif %}>{{ nazev }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="klient_id">Klient</label>
+        <select id="klient_id" name="klient_id" aria-describedby="napoveda-klient">
+          <option value="">Nikomu (pojistné podmínky)</option>
+          {% for klient in klienti %}
+          <option value="{{ klient.id }}" {% if hodnoty.klient_id == klient.id|string %}selected{% endif %}>{{ klient.jmeno }}</option>
+          {% endfor %}
+        </select>
+        <p class="napoveda" id="napoveda-klient">Smlouva musí patřit klientovi. Jen on ji pak uvidí.</p>
+      </div>
+    </div>
+    <label for="soubor">Soubor</label>
+    <input id="soubor" name="soubor" type="file" required accept="application/pdf,image/png,image/jpeg" aria-describedby="napoveda-soubor">
+    <p class="napoveda" id="napoveda-soubor">PDF, u hlášení škody i obrázek PNG nebo JPEG. Nejvýš {{ max_mb }} MB. Kontroluje se skutečný obsah souboru.</p>
+    <div class="akce"><button type="submit">Nahrát</button></div>
+  </form>
+</section>
+{% endif %}
+
+<section class="karta" aria-labelledby="nadpis-seznam">
+  <h2 id="nadpis-seznam">Nahrané dokumenty</h2>
+  {% if dokumenty %}
+  <div class="tabulka-obal">
+    <table>
+      <thead>
+        <tr><th>Název</th><th>Druh</th><th>Pojištění</th><th>Klient</th><th>Čtení</th><th>Velikost</th><th>Nahráno</th><th><span class="preskocit">Akce</span></th></tr>
+      </thead>
+      <tbody>
+        {% for d in dokumenty %}
+        <tr>
+          <td data-popis="Název"><a href="/dokumenty/{{ d.id }}"><strong>{{ d.nazev }}</strong></a><br><span class="tlumene">{{ d.nazev_souboru }}</span></td>
+          <td data-popis="Druh">{{ NAZVY_DRUHU[d.druh] }}</td>
+          <td data-popis="Pojištění">{{ NAZVY_POJISTENI[d.pojisteni] }}</td>
+          <td data-popis="Klient">{{ d.klient.jmeno if d.klient else "—" }}</td>
+          <td data-popis="Čtení"><span class="stav stav-{{ d.stav_cteni|lower }}">{{ NAZVY_STAVU_CTENI[d.stav_cteni] }}</span>{% if d.stav_cteni == "PRECTENO" %}<br><span class="tlumene">{{ d.pocet_stran|stran }}</span>{% endif %}</td>
+          <td data-popis="Velikost">{{ d.velikost|velikost }}</td>
+          <td data-popis="Nahráno">{{ d.nahrano|cas }}</td>
+          <td>
+            {% if not ukazka() %}
+            <button type="button" class="vedlejsi" data-otevri="smazat-{{ d.id }}" aria-label="Smazat {{ d.nazev }}">Smazat</button>
+            <dialog id="smazat-{{ d.id }}" aria-labelledby="smazat-nadpis-{{ d.id }}">
+              <h2 id="smazat-nadpis-{{ d.id }}">Smazat dokument?</h2>
+              <p>Smaže se dokument <strong>{{ d.nazev }}</strong> ({{ d.nazev_souboru }}) i se souborem.</p>
+              <p><strong>Tuto akci nejde vzít zpět.</strong></p>
+              <form method="post" action="/dokumenty/{{ d.id }}/smazat" class="akce">
+                <input type="hidden" name="csrf" value="{{ sezeni.csrf }}">
+                <button type="submit" class="nicive">Smazat</button>
+                <button type="button" class="vedlejsi" data-zavri>Zrušit</button>
+              </form>
+            </dialog>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="tlumene">Zatím tu není žádný dokument.</p>
+  {% endif %}
+</section>
+{% endblock %}

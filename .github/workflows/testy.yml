@@ -1,0 +1,43 @@
+# Celá sada testů v prohlížeči — stejné prostředí jako doma (docker compose).
+# Hesla účtů se vymyslí při každém běhu, žádná tajemství ani skutečná data.
+# Akce jen oficiální a zafixované na otisk (při aktualizaci změň otisk i verzi).
+name: Testy v prohlížeči
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: testy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  testy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Stažení kódu
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Sestavení obrazů
+        run: docker compose --profile test build web-test web-ukazka napodobenina e2e
+
+      - name: Testy
+        run: docker compose --profile test run --rm e2e
+
+      - name: Výpis serveru při chybě
+        if: failure()
+        run: docker compose --profile test logs web-test web-ukazka --tail 200
+
+      - name: Snímky spadlých testů
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: vysledky-testu
+          path: testy/vysledky/
+          retention-days: 7
+          if-no-files-found: ignore

@@ -1,0 +1,111 @@
+@kod: VPP-DOM-2026
+@nazev: Pojistné podmínky pro pojištění domácnosti
+@typ: podminky
+@pojisteni: domacnost
+
+# Pojistné podmínky pro pojištění domácnosti
+
+Platné pro smlouvy uzavřené od 1. 1. 2026 · označení VPP-DOM-2026
+
+Tyto pojistné podmínky upravují pojištění domácnosti u JK pojišťovny, a.s. (dále jen „pojišťovna“). Spolu s pojistnou smlouvou a dokumentem INFO-2026 tvoří obsah pojištění. Ujednání v pojistné smlouvě mají přednost.
+
+## Článek 1 – Co je domácnost
+
+Domácností se rozumí soubor movitých věcí, které slouží k uspokojování potřeb pojištěného a osob, které s ním žijí ve společné domácnosti, a nacházejí se v bytě nebo rodinném domě na adrese uvedené ve smlouvě (dále jen „místo pojištění“). Patří sem nábytek, elektronika, oblečení, kuchyňské vybavení, sportovní potřeby a také stavební součásti bytu, které si pojištěný pořídil na vlastní náklady (například kuchyňská linka nebo podlahy v nájemním bytě).
+
+### 1.1 Věci s omezeným limitem plnění
+
+| Druh věcí | Limit plnění |
+|---|---|
+| Cennosti (šperky, drahé kovy, sbírky, umělecká díla) | 10 % pojistné částky, nejvýše 100 000 Kč |
+| Peníze v hotovosti | 5 000 Kč; v uzamčeném trezoru 20 000 Kč |
+| Jízdní kola a kočárky ve společných prostorách domu | 15 000 Kč, jen pokud byly připevněny zámkem |
+| Věci ve sklepě, na půdě a v garáži | 30 000 Kč |
+| Věci v automobilu (jen varianta KOMFORT) | 10 000 Kč |
+
+### 1.2 Co pojištěno není
+
+Pojištěny nejsou motorová vozidla, plavidla, zvířata, věci určené k podnikání, data a software, doklady, platební karty a věci, které pojištěnému nepatří, nejde-li o věci půjčené nebo pronajaté pro osobní potřebu.
+
+## Článek 2 – Varianty a pojistná nebezpečí
+
+| Pojistné nebezpečí | ZÁKLAD | KOMFORT |
+|---|---|---|
+| Požár, výbuch, úder blesku, pád letadla | ano | ano |
+| Vichřice (vítr o rychlosti nejméně 75 km/h) a krupobití | ano | ano |
+| Povodeň a záplava | ano | ano |
+| Vodovodní škoda (voda unikající z potrubí a spotřebičů) | ano | ano |
+| Krádež vloupáním a loupež | ano | ano |
+| Vandalismus po vloupání | ano | ano |
+| Přepětí a zkrat v elektrické síti | ne | do 30 000 Kč |
+| Rozbití skel (okna, sklokeramická deska) | ne | do 20 000 Kč |
+| Odpovědnost v běžném občanském životě | ne | podle smlouvy, 1 000 000 Kč nebo 3 000 000 Kč |
+
+===
+
+## Článek 3 – Zabezpečení proti krádeži
+
+Při krádeži vloupáním plní pojišťovna nejvýše do limitu podle toho, jak byla domácnost v okamžiku krádeže zabezpečena. Rozhoduje skutečný stav, ne stav uvedený ve smlouvě.
+
+| Stupeň zabezpečení | Popis | Limit plnění za krádež |
+|---|---|---|
+| 1 | Dveře uzamčené běžným zámkem, okna zavřená | 200 000 Kč |
+| 2 | Bezpečnostní dveře nebo certifikovaný zámek s bezpečnostním kováním | 500 000 Kč |
+| 3 | Stupeň 2 a navíc alarm napojený na pult centrální ochrany | do výše pojistné částky |
+
+Nebyly-li dveře uzamčeny nebo bylo-li okno otevřené či vyklopené, plní pojišťovna nejvýše 20 000 Kč.
+
+## Článek 4 – Pojistná částka a podpojištění
+
+Pojistnou částku stanoví pojistník tak, aby odpovídala nové ceně všech věcí v domácnosti. **Je-li pojistná částka nižší než 85 % skutečné hodnoty domácnosti** (podpojištění), sníží pojišťovna plnění ve stejném poměru, v jakém je pojistná částka k hodnotě domácnosti. Pojišťovna každoročně k výročí smlouvy zvyšuje pojistnou částku o 3 % (indexace), pokud ji pojistník neodmítne.
+
+## Článek 5 – Spoluúčast
+
+Spoluúčast je uvedena ve smlouvě; není-li tam uvedena, činí **1 000 Kč** u každé pojistné události. U povodně a záplavy je spoluúčast vždy nejméně 10 000 Kč.
+
+## Článek 6 – Výluky: co pojištění nekryje
+
+Pojišťovna neplní za škody:
+
+- způsobené povodní nebo záplavou, která nastala **v prvních 10 dnech od počátku pojištění** (čekací doba); to neplatí, pokud pojištění plynule navazuje na jiné pojištění domácnosti;
+- vzniklé postupným působením vlhkosti, plísní, hub nebo kondenzací vody;
+- způsobené zanedbanou údržbou potrubí, střechy nebo spotřebičů;
+- krádeží v domácnosti, která byla **neobývaná déle než 60 dní nepřetržitě**;
+- způsobené úmyslně pojištěným nebo osobou žijící ve společné domácnosti;
+- na věcech zapůjčených třetím osobám mimo místo pojištění;
+- vzniklé válkou, terorismem, jadernou energií nebo zásahem státní moci;
+- prostým odcizením (krádež bez překonání překážky), nejde-li o loupež.
+
+## Článek 7 – Odpovědnost v běžném občanském životě (jen KOMFORT)
+
+Pojišťovna hradí za pojištěného újmu, kterou způsobí jiné osobě v běžném občanském životě – například vytopení sousedního bytu, rozbití cizí věci nebo zranění chodce při jízdě na kole. Limit plnění je uveden ve smlouvě. Spoluúčast činí 1 000 Kč. Pojištění se nevztahuje na škodu způsobenou osobám žijícím ve společné domácnosti, při podnikání, při řízení motorového vozidla ani úmyslně.
+
+===
+
+## Článek 8 – Plnění pojišťovny
+
+- Za zničenou nebo odcizenou věc vyplatí pojišťovna její **novou cenu** (kolik by stála stejná nebo srovnatelná nová věc).
+- **U elektroniky a mobilních telefonů starších 3 let** vyplatí jen časovou cenu (novou cenu sníženou o opotřebení).
+- Za poškozenou věc uhradí přiměřené náklady na opravu, nejvýše novou cenu.
+- Plnění je omezeno pojistnou částkou a limity podle článků 1 a 3 a snižuje se o spoluúčast.
+- Pojišťovna ukončí šetření do 3 měsíců od oznámení škody a plnění vyplatí do 15 dnů od skončení šetření.
+
+## Článek 9 – Povinnosti při škodě
+
+Pojištěný je povinen:
+
+- oznámit škodu pojišťovně **bez zbytečného odkladu, nejpozději do 15 dnů**;
+- krádež, loupež a vandalismus **ihned oznámit policii** a pojišťovně předat potvrzení o oznámení;
+- **do 8 dnů od oznámení krádeže předat seznam odcizených věcí** s jejich přibližnou cenou, a pokud je má, doklady o koupi nebo fotografie;
+- učinit opatření, aby se škoda dále nezvětšovala (uzavřít vodu, zajistit vyražené dveře);
+- poškozené věci neodstraňovat do prohlídky, nejde-li o nezbytné opatření z hygienických nebo bezpečnostních důvodů.
+
+## Článek 10 – Doba trvání a zánik pojištění
+
+Pojištění se sjednává na dobu neurčitou s ročním pojistným obdobím. Pro placení pojistného, výpověď a zánik platí stejná pravidla jako v článku 10 podmínek VPP-AUTO-2026: výpověď ke konci pojistného období nejméně 6 týdnů předem, výpověď do 2 měsíců od uzavření s osmidenní lhůtou a výpověď do 3 měsíců od oznámení pojistné události s měsíční lhůtou. Pojištění zaniká také přestěhováním, nenahlásí-li pojistník novou adresu do 30 dnů.
+
+> Při stěhování je pojištění platné na původní i nové adrese po dobu 30 dnů. Novou adresu stačí nahlásit online nebo na klientské lince.
+
+## Článek 11 – Závěrečná ustanovení
+
+Práva a povinnosti neupravené těmito podmínkami se řídí občanským zákoníkem. Tyto podmínky nabývají účinnosti dnem 1. 1. 2026.

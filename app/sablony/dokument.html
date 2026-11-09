@@ -1,0 +1,69 @@
+{% extends "zaklad.html" %}
+{% set aktivni = "dokumenty" %}
+{% block titulek %}{{ d.nazev }}{% endblock %}
+{% block obsah %}
+<p><a href="/dokumenty">← Dokumenty</a></p>
+<h1>{{ d.nazev }}</h1>
+{% if zprava %}<div class="upozorneni ok" role="status">{{ zprava }}</div>{% endif %}
+
+<section class="karta" aria-labelledby="nadpis-udaje">
+  <h2 id="nadpis-udaje">Údaje a čtení</h2>
+  <dl class="udaje">
+    <dt>Soubor</dt><dd>{{ d.nazev_souboru }} · {{ d.velikost|velikost }}</dd>
+    <dt>Druh</dt><dd>{{ NAZVY_DRUHU[d.druh] }} · {{ NAZVY_POJISTENI[d.pojisteni] }}</dd>
+    <dt>Klient</dt><dd>{{ d.klient.jmeno if d.klient else "nikomu (vidí všichni)" }}</dd>
+    <dt>Čtení</dt>
+    <dd>
+      <span class="stav stav-{{ d.stav_cteni|lower }}" id="stav-cteni">{{ NAZVY_STAVU_CTENI[d.stav_cteni] }}</span>
+      {% if d.stav_cteni == "PRECTENO" %}
+        · {{ d.pocet_stran|stran }}, {{ uryvky|length|uryvku }} · {{ d.precteno|cas }}
+      {% elif d.stav_cteni == "CHYBA" %}
+        · {{ d.chyba_cteni }}
+      {% elif d.stav_cteni == "CEKA_NA_OCR" %}
+        · Dokument je sken. Přepíše ho Claude, až bude na serveru klíč k Anthropicu.
+      {% endif %}
+    </dd>
+  </dl>
+  {% if d.stav_cteni not in ("CEKA", "CTE_SE") and not ukazka() %}
+  <form method="post" action="/dokumenty/{{ d.id }}/precist" class="akce">
+    <input type="hidden" name="csrf" value="{{ sezeni.csrf }}">
+    <button type="submit" class="vedlejsi">Přečíst znovu</button>
+  </form>
+  <p class="napoveda">U skenu znovu zaplatí přepis u Anthropicu. Text z běžného PDF je zdarma.</p>
+  {% endif %}
+</section>
+
+{% if uryvky %}
+<section class="karta" aria-labelledby="nadpis-uryvky">
+  <h2 id="nadpis-uryvky">Úryvky pro asistenta</h2>
+  <p class="tlumene">V těchto kouscích bude asistent hledat. Každý patří k jedné stránce, aby šlo citovat.</p>
+  <div class="tabulka-obal">
+    <table class="uryvky">
+      <thead><tr><th>#</th><th>Strana</th><th>Nadpis</th><th>Text</th></tr></thead>
+      <tbody>
+        {% for u in uryvky %}
+        <tr>
+          <td data-popis="#">{{ u.poradi }}</td>
+          <td data-popis="Strana">{{ u.strana }}</td>
+          <td data-popis="Nadpis">{{ u.nadpis or "—" }}</td>
+          <td data-popis="Text"><div class="text-uryvku">{{ u.text }}</div></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
+{% if stranky %}
+<section class="karta" aria-labelledby="nadpis-stranky">
+  <h2 id="nadpis-stranky">Text stránek</h2>
+  {% for s in stranky %}
+  <details class="strana">
+    <summary>Strana {{ s.cislo }}{% if s.ocr %} · přepis skenu (OCR){% endif %}</summary>
+    <div class="text-strany">{{ s.text }}</div>
+  </details>
+  {% endfor %}
+</section>
+{% endif %}
+{% endblock %}

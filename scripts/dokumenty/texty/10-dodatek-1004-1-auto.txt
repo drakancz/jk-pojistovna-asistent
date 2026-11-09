@@ -1,0 +1,38 @@
+@kod: DOD-1004-1
+@nazev: Dodatek č. 1 k pojistné smlouvě č. 1004
+@typ: dodatek
+@pojisteni: auto
+@klient: Tomáš Beneš
+@smlouva: 1004
+
+# Dodatek č. 1 k pojistné smlouvě č. 1004
+
+Havarijní pojištění vozidla Ford Focus, RZ 3JK 0002 · uzavřen dne 20. 8. 2026
+
+## 1. Smluvní strany
+
+| Pojišťovna | JK pojišťovna, a.s., Na Ukázce 10, 110 00 Praha 1 |
+| Pojistník a pojištěný | Tomáš Beneš, nar. 3. 11. 1979, Vzorová 8, 370 01 České Budějovice |
+
+## 2. Co se mění
+
+Na žádost pojistníka se **s účinností od 1. 9. 2026** mění pojistná smlouva č. 1004 takto:
+
+| Údaj | Dosud | Nově od 1. 9. 2026 |
+|---|---|---|
+| Varianta | STANDARD | **PLUS** (včetně střetu se zvěří a náhradního vozidla) |
+| Spoluúčast | 10 %, nejméně 10 000 Kč | **5 %, nejméně 5 000 Kč**; skla 1 000 Kč |
+| Řidiči | jen pojistník | pojistník a **Eva Benešová**, nar. 21. 6. 1982 |
+| Roční pojistné | 7 200 Kč | **9 960 Kč** |
+
+## 3. Doplatek pojistného
+
+Za období od 1. 9. 2026 do konce pojistného období 31. 1. 2027 (5 měsíců) zaplatí pojistník doplatek **1 150 Kč** do 15. 9. 2026, variabilní symbol 10041. Od 1. 2. 2027 se platí roční pojistné 9 960 Kč.
+
+## 4. Co zůstává
+
+Ostatní ujednání smlouvy č. 1004 zůstávají beze změny, včetně výluky pro škrábanec na zadním nárazníku podle článku 5 smlouvy. Škody vzniklé před 1. 9. 2026 se posuzují podle původního znění smlouvy.
+
+V Českých Budějovicích dne 20. 8. 2026
+
+Za JK pojišťovnu, a.s.: Pavel Vzorný, obchodní zástupce · Pojistník: Tomáš Beneš

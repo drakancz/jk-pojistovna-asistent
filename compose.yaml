@@ -1,0 +1,172 @@
+# Vývoj: docker compose up        → http://localhost:8000
+# Testy: docker compose --profile test run --rm e2e
+#
+# Místní databáze nemá heslo (trust): port se ven nepublikuje, dostane se
+# k ní jen aplikace uvnitř Dockeru. Díky tomu vývoj nepotřebuje .env
+# a žádné heslo neleží v souborech. Na Railway má databáze vlastního
+# uživatele s heslem (DATABASE_URL nastavuje Jakub).
+services:
+  db:
+    # Postgres 18.6 s pgvector 0.8.7 — stejné verze jako sdílený Postgres na Railway
+    image: pgvector/pgvector:0.8.7-pg18-trixie
+    environment:
+      POSTGRES_USER: asistent
+      POSTGRES_DB: asistent
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - db_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U asistent -d asistent"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  web:
+    build: .
+    # Klíč k Anthropicu (ANTHROPIC_API_KEY) zadává Jakub do .env — soubor je
+    # mimo repozitář i obraz. Bez něj se nic neděje, OCR a AI jsou vypnuté.
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: postgresql+psycopg://asistent@db:5432/asistent
+      COOKIE_SECURE: "false"
+      WATCHFILES_FORCE_POLLING: "true" # bind mount z Windows nehlásí změny
+    command: sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir app"
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # --- Testy: vlastní databáze v paměti, vlastní server, nic ven ---------
+  db-test:
+    profiles: [test]
+    image: pgvector/pgvector:0.8.7-pg18-trixie
+    environment:
+      POSTGRES_USER: asistent
+      POSTGRES_DB: asistent_test
+      POSTGRES_HOST_AUTH_METHOD: trust
+    tmpfs:
+      - /var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U asistent -d asistent_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  web-test:
+    profiles: [test]
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://asistent@db-test:5432/asistent_test
+      COOKIE_SECURE: "false"
+      # Nový klíč ke službě mimo počítač sem patří jako prázdný.
+      # Anthropic jediná výjimka: míří na napodobeninu níž (ne ven) a klíč
+      # je zjevně falešný. ANTHROPIC_BASE_URL se na Railway nezadává.
+      ANTHROPIC_API_KEY: "falesny-klic-jen-pro-napodobeninu"
+      ANTHROPIC_BASE_URL: http://napodobenina:8200
+      # Celkový denní limit asistenta nižší než na serveru (100), ať ho
+      # test_zz_limit_celkem.py vyčerpá rychle. Limit na účet zůstává 20.
+      AI_LIMIT_CELKEM: "40"
+    user: root # zápis do sdíleného svazku se stavem testů
+    command: scripts/test-server.sh
+    volumes:
+      - stav_testu:/stav
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8100/zdravi')"]
+      interval: 2s
+      timeout: 3s
+      retries: 60
+    depends_on:
+      db-test:
+        condition: service_healthy
+      napodobenina:
+        condition: service_healthy
+
+  # Živá ukázka (krok 6A): vlastní databáze a server s UKAZKA=1. Ostatní
+  # testy běží bez ukázky, proto zvlášť (jako e2e-ukazka v CRM).
+  db-ukazka:
+    profiles: [test]
+    image: pgvector/pgvector:0.8.7-pg18-trixie
+    environment:
+      POSTGRES_USER: asistent
+      POSTGRES_DB: asistent_ukazka_test
+      POSTGRES_HOST_AUTH_METHOD: trust
+    tmpfs:
+      - /var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U asistent -d asistent_ukazka_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  web-ukazka:
+    profiles: [test]
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://asistent@db-ukazka:5432/asistent_ukazka_test
+      COOKIE_SECURE: "false"
+      UKAZKA: "1"
+      # Jen pro testy: obnova na požádání hlavičkou. Na Railway se nezadává.
+      UKAZKA_TEST_OBNOVA: "1"
+      # Nízký limit na návštěvníka, ať ho test vyčerpá rychle (na serveru 10).
+      AI_LIMIT_NAVSTEVNIK: "2"
+      ANTHROPIC_API_KEY: "falesny-klic-jen-pro-napodobeninu"
+      ANTHROPIC_BASE_URL: http://napodobenina:8200
+    command: scripts/ukazka-test-server.sh
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8300/zdravi')"]
+      interval: 2s
+      timeout: 3s
+      retries: 90
+    depends_on:
+      db-ukazka:
+        condition: service_healthy
+      napodobenina:
+        condition: service_healthy
+
+  # Napodobenina Anthropic API (OCR v testech): nic neodchází ven.
+  napodobenina:
+    profiles: [test]
+    build: .
+    command: uvicorn --app-dir scripts napodobenina_anthropic:app --host 0.0.0.0 --port 8200 --no-server-header
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8200/zdravi')"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  e2e:
+    profiles: [test]
+    build: ./testy
+    environment:
+      ZAKLADNI_ADRESA: http://web-test:8100
+      ZAKLADNI_ADRESA_UKAZKY: http://web-ukazka:8300
+      NAPODOBENINA: http://napodobenina:8200
+    working_dir: /prace
+    command: pytest
+    volumes:
+      - ./testy:/prace/testy
+      - ./pytest.ini:/prace/pytest.ini:ro
+      - ./dokumenty:/prace/dokumenty:ro
+      - stav_testu:/stav:ro
+    depends_on:
+      web-test:
+        condition: service_healthy
+      web-ukazka:
+        condition: service_healthy
+
+  # --- Výroba vymyšlených PDF (1C) a skenů hlášení škody (4A) -------------
+  dokumenty:
+    profiles: [dokumenty]
+    build: ./scripts/dokumenty
+    command: ["sh", "-c", "python scripts/dokumenty/vytvor.py && python scripts/dokumenty/skeny.py"]
+    volumes:
+      - .:/prace
+
+volumes:
+  db_data:
+  stav_testu:

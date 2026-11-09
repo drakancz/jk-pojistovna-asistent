@@ -1,0 +1,57 @@
+{% extends "zaklad.html" %}
+{% set aktivni = "hlaseni" %}
+{% block titulek %}Hlášení škody{% endblock %}
+{% block obsah %}
+<h1>Hlášení škody</h1>
+<p class="tlumene">Údaje z naskenovaných hlášení vyplnila AI (Claude Haiku) z přepisu skenu. Je to návrh — před výplatou ho zkontroluje a potvrdí pracovník likvidace.</p>
+
+{% if presnost_celkem %}
+<div class="upozorneni" role="note" id="presnost-celkem">
+  <strong>Přesnost na ukázkových hlášeních:</strong> AI správně {{ presnost_celkem[0] }} z {{ presnost_celkem[1] }} údajů
+  ({{ (100 * presnost_celkem[0] / presnost_celkem[1])|round|int }} %).
+  {% if presnost_kontroly %}<span id="presnost-kontroly">Na {{ presnost_kontroly[0] }} zkontrolovaných hlášeních: AI {{ presnost_kontroly[1] }} z {{ presnost_kontroly[3] }}, po kontrole člověkem {{ presnost_kontroly[2] }} z {{ presnost_kontroly[3] }}.</span>{% endif %}
+  Správné údaje zná jen administrátor.
+</div>
+{% endif %}
+
+<section class="karta" aria-labelledby="nadpis-seznam">
+  <h2 id="nadpis-seznam">Nahraná hlášení</h2>
+  {% if hlaseni %}
+  <div class="tabulka-obal">
+    <table class="hlaseni">
+      <thead>
+        <tr><th>Hlášení</th><th>Klient</th><th>Smlouva</th><th>Datum události</th><th>Odhad škody</th><th>Vytěžení</th><th>Kontrola</th>{% if presnost_celkem %}<th>Přesnost</th><th>Po kontrole</th>{% endif %}</tr>
+      </thead>
+      <tbody>
+        {% for h in hlaseni %}
+        {% set n = h.udaje %}
+        <tr>
+          <td data-popis="Hlášení"><a href="/hlaseni/{{ h.d.id }}"><strong>{{ h.d.nazev }}</strong></a></td>
+          <td data-popis="Klient">{{ h.d.klient.jmeno if h.d.klient else "—" }}</td>
+          <td data-popis="Smlouva">{{ n.get("cislo_smlouvy") or "—" }}</td>
+          <td data-popis="Datum události">{{ zobraz("datum_udalosti", n.get("datum_udalosti")) }}</td>
+          <td data-popis="Odhad škody">{{ zobraz("odhad_skody", n.get("odhad_skody"), n) }}</td>
+          <td data-popis="Vytěžení">
+            {% if h.d.stav_cteni != "PRECTENO" %}
+              <span class="stav stav-{{ h.d.stav_cteni|lower }}">{{ NAZVY_STAVU_CTENI[h.d.stav_cteni] }}</span>
+            {% elif h.v %}
+              <span class="stav stav-{{ h.v.stav|lower }}">{{ NAZVY_STAVU_VYTEZENI[h.v.stav] }}</span>
+            {% else %}
+              <span class="stav stav-ceka">{{ NAZVY_STAVU_VYTEZENI["CEKA"] }}</span>
+            {% endif %}
+          </td>
+          <td data-popis="Kontrola">{% if h.v and h.v.stav_kontroly %}<span class="stav stav-kontrola-{{ h.v.stav_kontroly|lower }}">{{ NAZVY_STAVU_KONTROLY[h.v.stav_kontroly] }}</span>{% else %}—{% endif %}</td>
+          {% if presnost_celkem %}
+          <td data-popis="Přesnost">{% if h.presnost %}{{ h.presnost[0] }} z {{ h.presnost[1] }}{% else %}—{% endif %}</td>
+          <td data-popis="Po kontrole">{% if h.presnost_po %}{{ h.presnost_po[0] }} z {{ h.presnost_po[1] }}{% else %}—{% endif %}</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="tlumene">Zatím tu není žádné hlášení škody.</p>
+  {% endif %}
+</section>
+{% endblock %}

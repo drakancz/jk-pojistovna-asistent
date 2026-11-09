@@ -1,0 +1,48 @@
+@kod: SML-1003
+@nazev: Pojistná smlouva č. 1003 – roční cestovní pojištění
+@typ: smlouva
+@pojisteni: cestovni
+@klient: Petra Malá
+@smlouva: 1003
+
+# Pojistná smlouva č. 1003
+
+Roční cestovní pojištění · uzavřena dne 25. 5. 2026 online
+
+## 1. Smluvní strany
+
+| Pojišťovna | JK pojišťovna, a.s., Na Ukázce 10, 110 00 Praha 1 |
+| Pojistník | Petra Malá, nar. 14. 5. 1988, Ukázková 15, 602 00 Brno |
+| Kontakt | petra.mala@example.com, +420 600 000 001 |
+
+## 2. Pojištěné osoby
+
+| Jméno | Datum narození |
+|---|---|
+| Petra Malá | 14. 5. 1988 |
+| Karel Malý | 2. 9. 1986 |
+
+## 3. Rozsah pojištění
+
+| Druh | roční pojištění, libovolný počet cest, každá nejvýše 90 dní |
+| Územní rozsah | **SVĚT** |
+| Léčebné výlohy | 6 000 000 Kč na osobu |
+| Úraz | smrt 300 000 Kč, trvalé následky 600 000 Kč |
+| Zavazadla | 20 000 Kč, za jednu věc 5 000 Kč |
+| Odpovědnost | zdraví 4 000 000 Kč, věc 2 000 000 Kč |
+| Připojištění SPORT | **ano** – rizikové sporty podle článku 5 VPP-CEST-2026 |
+| Připojištění STORNO | **ne** |
+
+## 4. Pojistné a doba trvání
+
+| Počátek pojištění | 1. 6. 2026 |
+| Doba trvání | neurčitá, pojistné období 1 rok |
+| Roční pojistné za obě osoby | **3 490 Kč** |
+| Splatnost | ročně, vždy k 1. 6. |
+| Způsob placení | platební kartou při sjednání online |
+
+## 5. Důležité upozornění
+
+Asistenční služba JK pojišťovny: +420 200 000 111 (nonstop). Před hospitalizací nebo ošetřením dražším než 30 000 Kč ji kontaktujte vždy. Smlouva byla uzavřena na dálku – od smlouvy lze odstoupit do 14 dnů od uzavření.
+
+Pojistník prohlašuje, že převzal pojistné podmínky VPP-CEST-2026 a dokument INFO-2026, které jsou součástí smlouvy. Smlouva byla uzavřena elektronicky dne 25. 5. 2026.

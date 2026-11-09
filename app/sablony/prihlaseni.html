@@ -1,0 +1,34 @@
+{% extends "zaklad.html" %}
+{% block titulek %}Přihlášení{% endblock %}
+{% block obsah %}
+<div class="karta prihlaseni">
+  <h1>Přihlášení</h1>
+  <p class="tlumene">Asistent nad dokumenty JK pojišťovny. Firma i dokumenty jsou vymyšlené.</p>
+  {% if chyba %}<div class="upozorneni chyba" role="alert">{{ chyba }}</div>{% endif %}
+  {% if ukazka() %}
+  <section class="ukazka-ucty" aria-labelledby="nadpis-ukazky">
+    <h2 id="nadpis-ukazky">Vyzkoušejte ukázku</h2>
+    <p class="tlumene">Vyberte roli — každá vidí něco jiného. Heslo všech tří účtů je <strong>{{ HESLO_UKAZKY }}</strong>.</p>
+    <ul>
+      {% for ucet in UKAZKOVE_UCTY %}
+      <li>
+        <form method="post" action="/prihlaseni">
+          <input type="hidden" name="email" value="{{ ucet.email }}">
+          <input type="hidden" name="heslo" value="{{ HESLO_UKAZKY }}">
+          <button type="submit">Vyzkoušet jako {{ NAZVY_ROLI[ucet.role] }}</button>
+        </form>
+        <p class="napoveda">{{ ucet.jmeno }} · {{ ucet.email }} — {{ ucet.popis }}.</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  <form method="post" action="/prihlaseni">
+    <label for="email">E-mail</label>
+    <input id="email" name="email" type="email" autocomplete="username" required maxlength="254" value="{{ email or '' }}">
+    <label for="heslo">Heslo</label>
+    <input id="heslo" name="heslo" type="password" autocomplete="current-password" required maxlength="200">
+    <div class="akce"><button type="submit">Přihlásit</button></div>
+  </form>
+</div>
+{% endblock %}

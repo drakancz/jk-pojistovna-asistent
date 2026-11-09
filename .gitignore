@@ -1,0 +1,15 @@
+# Tajemství — nikdy do repozitáře.
+.env
+.env.*
+!.env.example
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+# Výsledky testů
+testy/zprava/
+testy/vysledky/
+node_modules/
+# Nahrané soubory při vývoji
+data/

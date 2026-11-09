@@ -1,0 +1,53 @@
+@kod: SML-1005
+@nazev: Pojistná smlouva č. 1005 – pojištění domácnosti
+@typ: smlouva
+@pojisteni: domacnost
+@klient: Tomáš Beneš
+@smlouva: 1005
+
+# Pojistná smlouva č. 1005
+
+Pojištění domácnosti · uzavřena dne 25. 3. 2026
+
+## 1. Smluvní strany
+
+| Pojišťovna | JK pojišťovna, a.s., Na Ukázce 10, 110 00 Praha 1 |
+| Pojistník a pojištěný | Tomáš Beneš, nar. 3. 11. 1979 |
+| Kontakt | tomas.benes@example.com, +420 600 000 002 |
+
+## 2. Místo pojištění
+
+| Adresa | Vzorová 8, 370 01 České Budějovice |
+| Druh | rodinný dům, přízemí a obytné podkroví, sklep a garáž |
+| Osoby ve společné domácnosti | Tomáš Beneš, Eva Benešová, Adam Beneš |
+| Zabezpečení | **stupeň 1** – běžný zámek, bez alarmu (článek 3 VPP-DOM-2026) |
+
+## 3. Rozsah pojištění
+
+| Varianta | **ZÁKLAD** |
+| Pojistná částka domácnosti | 600 000 Kč (nová cena) |
+| Limit za krádež vloupáním | 200 000 Kč (podle stupně zabezpečení 1) |
+| Odpovědnost v běžném občanském životě | nesjednána |
+| Přepětí a zkrat | nesjednáno (varianta ZÁKLAD) |
+| Spoluúčast | **2 000 Kč**; povodeň a záplava 10 000 Kč |
+| Indexace pojistné částky | ne – pojistník ji odmítl |
+
+## 4. Pojistné a doba trvání
+
+| Počátek pojištění | 1. 4. 2026 |
+| Doba trvání | neurčitá, pojistné období 1 rok |
+| Roční pojistné | **1 980 Kč** |
+| Splatnost | pololetně po 990 Kč, k 1. 4. a 1. 10. |
+| Způsob placení | převodem, variabilní symbol 1005 |
+
+## 5. Zvláštní ujednání
+
+Dům leží v záplavovém území se zvýšeným rizikem (zóna 3). Pojištění nenavazuje na předchozí pojištění domácnosti, uplatní se proto čekací doba 10 dní u povodně a záplavy (článek 6 VPP-DOM-2026). Věci v garáži a ve sklepě jsou pojištěny do 30 000 Kč.
+
+## 6. Podpisy
+
+Pojistník prohlašuje, že převzal pojistné podmínky VPP-DOM-2026 a dokument INFO-2026, které jsou součástí smlouvy.
+
+V Českých Budějovicích dne 25. 3. 2026
+
+Za JK pojišťovnu, a.s.: Pavel Vzorný, obchodní zástupce · Pojistník: Tomáš Beneš

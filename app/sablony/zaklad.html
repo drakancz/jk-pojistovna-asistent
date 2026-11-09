@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulek %}{% endblock %} · JK pojišťovna</title>
+  <link rel="stylesheet" href="/static/styl.css">
+  <script src="/static/okna.js" defer></script>
+  {% if obnovit %}<meta http-equiv="refresh" content="2">{% endif %}
+</head>
+<body>
+  <a class="preskocit" href="#obsah">Přeskočit na obsah</a>
+  <header class="hlavicka">
+    <div class="hlavicka-vnitrek">
+      <a class="znacka" href="/">JK <span>pojišťovna</span></a>
+      {% if uzivatel %}
+      <nav aria-label="Hlavní menu">
+        <ul class="menu">
+          <li><a href="/" {% if aktivni == "prehled" %}aria-current="page"{% endif %}>Přehled</a></li>
+          <li><a href="/asistent" {% if aktivni == "asistent" %}aria-current="page"{% endif %}>Asistent</a></li>
+          {% if uzivatel.role in ("ADMIN", "LIKVIDACE") %}
+          <li><a href="/hledani" {% if aktivni == "hledani" %}aria-current="page"{% endif %}>Vyhledávání</a></li>
+          <li><a href="/hlaseni" {% if aktivni == "hlaseni" %}aria-current="page"{% endif %}>Hlášení škody</a></li>
+          {% endif %}
+          {% if uzivatel.role == "ADMIN" %}
+          <li><a href="/dokumenty" {% if aktivni == "dokumenty" %}aria-current="page"{% endif %}>Dokumenty</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+      <div class="ucet">
+        <span>{{ uzivatel.jmeno }} · {{ NAZVY_ROLI[uzivatel.role] }}</span>
+        <form method="post" action="/odhlaseni">
+          <input type="hidden" name="csrf" value="{{ sezeni.csrf }}">
+          <button type="submit" class="odkaz">Odhlásit</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  </header>
+  {% if ukazka() %}
+  <p class="pruh-ukazky">Ukázka: firma JK pojišťovna i všechna data jsou vymyšlená a každou noc se vrátí do výchozího stavu.</p>
+  {% endif %}
+  <main id="obsah">
+    {% block obsah %}{% endblock %}
+  </main>
+</body>
+</html>

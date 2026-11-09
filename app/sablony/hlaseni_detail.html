@@ -1,0 +1,202 @@
+{% extends "zaklad.html" %}
+{% set aktivni = "hlaseni" %}
+{% block titulek %}{{ d.nazev }}{% endblock %}
+{% block obsah %}
+<p><a href="/hlaseni">← Hlášení škody</a></p>
+<h1>{{ d.nazev }}</h1>
+{% if zprava %}<div class="upozorneni ok" role="status">{{ zprava }}</div>{% endif %}
+{% if chyby %}<div class="upozorneni chyba" role="alert" id="chyby">{{ chyby.get("_", "Údaje se neuložily — opravte zvýrazněná políčka.") }}</div>{% endif %}
+
+<section class="karta" aria-labelledby="nadpis-udaje">
+  <h2 id="nadpis-udaje">Údaje z hlášení</h2>
+  <dl class="udaje">
+    <dt>Klient</dt><dd>{{ d.klient.jmeno if d.klient else "—" }}</dd>
+    <dt>Vytěžení</dt>
+    <dd>
+      {% if d.stav_cteni != "PRECTENO" %}
+        <span class="stav stav-{{ d.stav_cteni|lower }}" id="stav-vytezeni">{{ NAZVY_STAVU_CTENI[d.stav_cteni] }}</span>
+        {% if d.stav_cteni == "CEKA_NA_OCR" %}· Sken přepíše Claude, až bude na serveru klíč k Anthropicu.{% endif %}
+      {% elif v %}
+        <span class="stav stav-{{ v.stav|lower }}" id="stav-vytezeni">{{ NAZVY_STAVU_VYTEZENI[v.stav] }}</span>
+        {% if v.stav == "HOTOVO" %}· {{ v.vytezeno|cas }}
+        {% elif v.stav == "CHYBA" %}· {{ v.chyba }}
+        {% elif v.stav == "CEKA_NA_AI" %}· Údaje vyplní Claude, až bude na serveru klíč k Anthropicu.
+        {% endif %}
+      {% else %}
+        <span class="stav stav-ceka" id="stav-vytezeni">{{ NAZVY_STAVU_VYTEZENI["CEKA"] }}</span>
+      {% endif %}
+    </dd>
+    {% if v and v.stav_kontroly %}
+    <dt>Kontrola</dt>
+    <dd>
+      <span class="stav stav-kontrola-{{ v.stav_kontroly|lower }}" id="stav-kontroly">{{ NAZVY_STAVU_KONTROLY[v.stav_kontroly] }}</span>
+      {% if v.potvrzeno %}· {{ v.potvrzeno|cas }}, {{ v.potvrdil.jmeno if v.potvrdil else "smazaný účet" }}{% endif %}
+    </dd>
+    {% endif %}
+    {% if uzivatel.role == "ADMIN" %}
+    <dt>Dokument</dt><dd><a href="/dokumenty/{{ d.id }}">Text stránek a úryvky</a></dd>
+    {% endif %}
+  </dl>
+  {% if lze_vytezit and not ukazka() %}
+  <form method="post" action="/hlaseni/{{ d.id }}/vytezit" class="akce">
+    <input type="hidden" name="csrf" value="{{ sezeni.csrf }}">
+    <button type="submit" class="vedlejsi">Vytěžit znovu</button>
+  </form>
+  <p class="napoveda">Pošle přepis znovu Claudovi a nahradí návrh údajů. U Anthropicu se zaplatí (zlomek centu).</p>
+  {% endif %}
+</section>
+
+{% if upravit %}
+{# --- Kontrola člověkem (krok 4C): jen pracovník likvidace --- #}
+<section class="karta" aria-labelledby="nadpis-kontrola">
+  <h2 id="nadpis-kontrola">Kontrola údajů</h2>
+  <p class="tlumene">Údaje předvyplnila AI z přepisu skenu. Porovnejte je se skenem níž, opravte, co nesedí, a potvrďte. Každá změna se zapíše do historie.</p>
+  <form method="post" action="/hlaseni/{{ d.id }}/kontrola" class="formular-kontroly" novalidate>
+    <input type="hidden" name="csrf" value="{{ sezeni.csrf }}">
+    <input type="hidden" name="verze" value="{{ v.verze }}">
+    <div class="mrizka">
+    {% for klic, popisek, _ in pole if klic != "polozky" %}
+      {% set druh = druh_pole(klic) %}
+      <div class="pole{% if druh == 'dlouhy' %} pole-siroke{% endif %}" data-udaj="{{ klic }}">
+        <label for="pole-{{ klic }}">{{ popisek }}</label>
+        {% set popsano = [] %}
+        {% if klic in chyby %}{% set _ = popsano.append("chyba-" ~ klic) %}{% endif %}
+        {% if klic in opraveno %}{% set _ = popsano.append("ai-" ~ klic) %}{% endif %}
+        {% set atributy %}id="pole-{{ klic }}" name="{{ klic }}"{% if klic in chyby %} aria-invalid="true"{% endif %}{% if popsano %} aria-describedby="{{ popsano|join(' ') }}"{% endif %}{% endset %}
+        {% if druh == "vyber" %}
+          <select {{ atributy }}>
+            <option value="">— nevyplněno —</option>
+            {% for hodnota, nazev in vybery[klic] %}
+            <option value="{{ hodnota }}"{% if hodnoty[klic] == hodnota %} selected{% endif %}>{{ nazev }}</option>
+            {% endfor %}
+          </select>
+        {% elif druh == "datum" %}
+          <input type="date" {{ atributy }} value="{{ hodnoty[klic] }}">
+        {% elif druh == "cislo" %}
+          <input type="text" inputmode="numeric" {{ atributy }} value="{{ hodnoty[klic] }}" maxlength="20">
+        {% elif druh == "dlouhy" %}
+          <textarea {{ atributy }} rows="3" maxlength="{{ max_delka }}">{{ hodnoty[klic] }}</textarea>
+        {% else %}
+          <input type="text" {{ atributy }} value="{{ hodnoty[klic] }}" maxlength="{{ max_delka }}">
+        {% endif %}
+        {% if klic in chyby %}<p class="chyba-pole" id="chyba-{{ klic }}">{{ chyby[klic] }}</p>{% endif %}
+        {% if klic in opraveno %}<p class="napoveda opraveno" id="ai-{{ klic }}">Opraveno · AI navrhla: {{ opraveno[klic] }}</p>{% endif %}
+      </div>
+    {% endfor %}
+    </div>
+
+    <fieldset class="polozky" data-udaj="polozky"{% if "polozky" in chyby %} aria-describedby="chyba-polozky"{% endif %}>
+      <legend>Seznam poškozených věcí</legend>
+      <p class="napoveda">Prázdný řádek se neuloží. Řádek smažete tak, že ho vymažete celý.</p>
+      {% if "polozky" in chyby %}<p class="chyba-pole" id="chyba-polozky">{{ chyby["polozky"] }}</p>{% endif %}
+      {% if "polozky" in opraveno %}<p class="napoveda opraveno">Opraveno · AI navrhla: {{ opraveno["polozky"] }}</p>{% endif %}
+      <div class="tabulka-obal">
+        <table class="polozky">
+          <thead><tr><th>Věc</th><th>Rok pořízení</th><th>Cena (Kč)</th></tr></thead>
+          <tbody>
+          {% for r in radky_polozek %}
+            <tr>
+              <td data-popis="Věc"><input type="text" name="polozka-{{ loop.index0 }}-vec" value="{{ r.vec }}" maxlength="{{ max_delka }}" aria-label="Věc, řádek {{ loop.index }}"></td>
+              <td data-popis="Rok pořízení"><input type="text" inputmode="numeric" name="polozka-{{ loop.index0 }}-rok" value="{{ r.rok }}" maxlength="4" aria-label="Rok pořízení, řádek {{ loop.index }}"></td>
+              <td data-popis="Cena (Kč)"><input type="text" inputmode="numeric" name="polozka-{{ loop.index0 }}-cena" value="{{ r.cena }}" maxlength="20" aria-label="Cena, řádek {{ loop.index }}"></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </fieldset>
+
+    <div class="akce">
+      <button type="submit" name="akce" value="ulozit" class="vedlejsi">Uložit rozpracované</button>
+      <button type="submit" name="akce" value="potvrdit">Potvrdit údaje</button>
+    </div>
+    <p class="napoveda">Po potvrzení jsou údaje uzamčené. Kdyby se později našla chyba, jde je vrátit ke kontrole.</p>
+  </form>
+</section>
+
+{% elif udaje %}
+<section class="karta" aria-labelledby="nadpis-navrh">
+  <h2 id="nadpis-navrh">
+    {% if v.stav_kontroly == "POTVRZENO" %}Potvrzené údaje{% elif v.stav_kontroly == "ROZPRACOVANO" %}Rozpracovaná kontrola{% else %}Návrh od AI{% endif %}
+  </h2>
+  {% if v.stav_kontroly == "CEKA" %}
+  <p class="tlumene">Údaje opsané z přepisu skenu. Zkontrolovat a potvrdit je může pracovník likvidace.</p>
+  {% elif v.stav_kontroly == "ROZPRACOVANO" %}
+  <p class="tlumene">Pracovník likvidace údaje opravil, ale ještě je nepotvrdil.</p>
+  {% endif %}
+  {% if presnost %}
+  <p id="presnost"><strong>Ukázkové hlášení:</strong> AI správně {{ presnost[0] }} z {{ presnost[1] }} údajů{% if presnost_po %}, po kontrole člověkem <span id="presnost-po">{{ presnost_po[0] }} z {{ presnost_po[1] }}</span>{% endif %}.</p>
+  {% endif %}
+  <div class="tabulka-obal">
+    <table class="vytezene">
+      <thead><tr><th>Údaj</th><th>Hodnota</th>{% if srovnani %}<th>Kontrola</th>{% endif %}</tr></thead>
+      <tbody>
+        {% for klic, popisek, _ in pole %}
+        <tr data-udaj="{{ klic }}">
+          <th scope="row" data-popis="Údaj">{{ popisek }}</th>
+          <td data-popis="Hodnota">
+            {{ zobraz(klic, udaje[klic], udaje) }}
+            {% if klic in opraveno %}<p class="napoveda opraveno">Opraveno · AI navrhla: {{ opraveno[klic] }}</p>{% endif %}
+          </td>
+          {% if srovnani %}
+          {% set spravne = zobraz(klic, srovnani[klic][1], {"mena": srovnani["mena"][1]} if klic == "odhad_skody" else udaje) %}
+          <td data-popis="Kontrola">
+            {% if srovnani_po %}
+              <span class="{{ 'spravne' if srovnani[klic][0] else 'spatne' }}">AI {{ "✓" if srovnani[klic][0] else "✗" }}</span>
+              · <span class="{{ 'spravne' if srovnani_po[klic][0] else 'spatne' }}">po kontrole {{ "✓" if srovnani_po[klic][0] else "✗" }}</span>
+              {% if not srovnani_po[klic][0] %}<span class="spatne"> správně: {{ spravne }}</span>{% endif %}
+            {% elif srovnani[klic][0] %}<span class="spravne">✓ sedí</span>
+            {% else %}<span class="spatne">✗ správně: {{ spravne }}</span>{% endif %}
+          </td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if vratit %}
+  <div class="akce">
+    <button type="button" class="vedlejsi" data-otevri="vratit-okno">Vrátit ke kontrole</button>
+  </div>
+  <dialog id="vratit-okno" aria-labelledby="vratit-nadpis">
+    <h2 id="vratit-nadpis">Vrátit ke kontrole?</h2>
+    <p>Potvrzení údajů hlášení <strong>{{ d.nazev }}</strong> se zruší a údaje půjde znovu opravit. Opravy zůstanou zachované, vrácení se zapíše do historie.</p>
+    <form method="post" action="/hlaseni/{{ d.id }}/vratit" class="akce">
+      <input type="hidden" name="csrf" value="{{ sezeni.csrf }}">
+      <input type="hidden" name="verze" value="{{ v.verze }}">
+      <button type="submit">Vrátit ke kontrole</button>
+      <button type="button" class="vedlejsi" data-zavri>Zrušit</button>
+    </form>
+  </dialog>
+  {% endif %}
+</section>
+{% endif %}
+
+{% if historie %}
+<section class="karta" aria-labelledby="nadpis-historie">
+  <h2 id="nadpis-historie">Historie</h2>
+  <ol class="historie">
+    {% for h in historie %}
+    <li>
+      <p class="historie-hlavicka"><strong>{{ h.akce }}</strong> · {{ h.cas|cas }} · {{ h.kdo }}</p>
+      {% if h.zmeny %}
+      <ul class="historie-zmeny">
+        {% for popisek, puvodne, nove in h.zmeny %}
+        <li>{{ popisek }}: <del>{{ puvodne }}</del> → <ins>{{ nove }}</ins></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}
+
+<section class="karta" aria-labelledby="nadpis-sken">
+  <h2 id="nadpis-sken">Sken</h2>
+  {% if je_obrazek %}
+  <img class="sken" src="/hlaseni/{{ d.id }}/sken" alt="Sken hlášení: {{ d.nazev }}">
+  {% endif %}
+  <p><a href="/hlaseni/{{ d.id }}/sken" target="_blank" rel="noopener">Otevřít sken{% if not je_obrazek %} (PDF){% endif %} v novém okně</a></p>
+</section>
+{% endblock %}

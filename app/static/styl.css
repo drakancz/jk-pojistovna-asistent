@@ -1,0 +1,226 @@
+/* Vzhled JK pojišťovny. Barvy jen jako proměnné, nikde natvrdo.
+   Písma jsou systémová — CSP pouští styly jen z naší adresy. */
+:root {
+  color-scheme: light;
+  --paper: #eeebe4;
+  --surface: #ffffff;
+  --surface-2: #f6f4ef;
+  --ink: #151c2e;
+  --muted: #5b6275;
+  --line: #d9d4ca;
+  --line-strong: #c2bbad;
+  --brand: #1d4a85;
+  --brand-ink: #ffffff;
+  --brand-soft: #e2e9f4;
+  --ok: #0f6b48;
+  --ok-soft: #e2efe8;
+  --danger: #a3271f;
+  --danger-ink: #ffffff;
+  --danger-soft: #f7e3e1;
+  --shadow: 0 1px 2px rgba(21, 28, 46, 0.05), 0 10px 28px -20px rgba(21, 28, 46, 0.3);
+  --sans: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #0c1120;
+    --surface: #141b2d;
+    --surface-2: #1a2236;
+    --ink: #f3f1ec;
+    --muted: #a2a9b9;
+    --line: #252e43;
+    --line-strong: #37425a;
+    --brand: #8fb4ec;
+    --brand-ink: #0c1120;
+    --brand-soft: #1a2740;
+    --ok: #4fbf8f;
+    --ok-soft: #152b24;
+    --danger: #f08a80;
+    --danger-ink: #0c1120;
+    --danger-soft: #3a1b1a;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+a { color: var(--brand); }
+h1, h2 { line-height: 1.2; margin: 0 0 0.75rem; letter-spacing: -0.01em; }
+h1 { font-size: 1.6rem; }
+h2 { font-size: 1.2rem; }
+
+.preskocit { position: absolute; left: -9999px; }
+.preskocit:focus { left: 1rem; top: 1rem; background: var(--surface); padding: 0.5rem; z-index: 10; }
+
+.hlavicka {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.hlavicka-vnitrek {
+  max-width: 72rem; margin: 0 auto; padding: 0.75rem 1rem;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.5rem;
+}
+.znacka { font-weight: 700; color: var(--ink); text-decoration: none; font-size: 1.05rem; }
+.znacka span { color: var(--brand); }
+.menu { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; margin: 0; padding: 0; list-style: none; }
+.menu a { text-decoration: none; padding: 0.25rem 0; }
+.menu a[aria-current="page"] { font-weight: 600; border-bottom: 2px solid var(--brand); }
+.ucet { margin-left: auto; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; color: var(--muted); font-size: 0.95rem; }
+
+main { max-width: 72rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+.karta {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: 1.25rem; box-shadow: var(--shadow); margin-bottom: 1.25rem;
+}
+.prihlaseni { max-width: 26rem; margin: 3rem auto; }
+.tlumene { color: var(--muted); }
+
+label { display: block; font-weight: 600; margin: 0.75rem 0 0.25rem; }
+input[type="email"], input[type="password"], input[type="text"], select, input[type="file"] {
+  width: 100%; padding: 0.6rem 0.7rem; font: inherit; color: var(--ink);
+  background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: 8px;
+}
+input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible {
+  outline: 3px solid var(--brand); outline-offset: 2px;
+}
+.mrizka { display: grid; gap: 0 1rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+.napoveda { color: var(--muted); font-size: 0.9rem; margin: 0.25rem 0 0; }
+
+button, .tlacitko {
+  display: inline-block; font: inherit; font-weight: 600; cursor: pointer;
+  padding: 0.55rem 1rem; border-radius: 8px; border: 1px solid transparent;
+  background: var(--brand); color: var(--brand-ink); text-decoration: none;
+}
+button.vedlejsi { background: transparent; color: var(--ink); border-color: var(--line-strong); }
+button.nicive { background: var(--danger); color: var(--danger-ink); }
+button.odkaz { background: none; border: none; padding: 0; color: var(--brand); font-weight: 400; text-decoration: underline; }
+.akce { margin-top: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+.upozorneni { padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; }
+.upozorneni.chyba { background: var(--danger-soft); color: var(--ink); border: 1px solid var(--danger); }
+.upozorneni.ok { background: var(--ok-soft); color: var(--ink); border: 1px solid var(--ok); }
+
+.tabulka-obal { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 0.9rem; color: var(--muted); font-weight: 600; }
+
+/* Na telefonu se tabulka skládá do karet — nic nepřečnívá. */
+@media (max-width: 40rem) {
+  table, thead, tbody, tr, th, td { display: block; }
+  thead { position: absolute; left: -9999px; }
+  tr { border-bottom: 1px solid var(--line); padding: 0.5rem 0; }
+  td { border: none; padding: 0.15rem 0; }
+  td[data-popis]::before { content: attr(data-popis) ": "; color: var(--muted); font-size: 0.9rem; }
+  .ucet { margin-left: 0; }
+}
+
+/* Stav čtení dokumentu: barva písma + rámeček, ne průhlednost (kontrast). */
+.stav { display: inline-block; font-size: 0.85rem; font-weight: 600; padding: 0.05rem 0.5rem; border-radius: 6px; border: 1px solid var(--line-strong); }
+.stav-precteno { color: var(--ok); border-color: var(--ok); background: var(--ok-soft); }
+.stav-chyba { color: var(--danger); border-color: var(--danger); background: var(--danger-soft); }
+.stav-ceka, .stav-cte_se, .stav-ceka_na_ocr, .stav-probiha, .stav-ceka_na_ai { color: var(--ink); background: var(--surface-2); }
+.stav-hotovo { color: var(--ok); border-color: var(--ok); background: var(--ok-soft); }
+.spravne { color: var(--ok); }
+.spatne { color: var(--danger); }
+img.sken { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); }
+table.vytezene th[scope="row"] { text-align: left; font-weight: 600; }
+
+.udaje { display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1rem; margin: 0; }
+.udaje dt { color: var(--muted); }
+.udaje dd { margin: 0; }
+.text-uryvku, .text-strany { white-space: pre-wrap; font-size: 0.92rem; }
+.text-strany { background: var(--surface-2); border-radius: 8px; padding: 0.75rem; margin-top: 0.5rem; }
+details.strana { border-top: 1px solid var(--line); padding: 0.5rem 0; }
+details.strana summary { cursor: pointer; font-weight: 600; }
+table.uryvky td:first-child, table.uryvky td:nth-child(2) { white-space: nowrap; }
+@media (max-width: 40rem) {
+  .udaje { grid-template-columns: 1fr; gap: 0 0; }
+  .udaje dd { margin-bottom: 0.4rem; }
+}
+
+dialog {
+  max-width: min(30rem, calc(100vw - 2rem)); border: 1px solid var(--line-strong);
+  border-radius: 12px; background: var(--surface); color: var(--ink); padding: 1.25rem;
+}
+dialog::backdrop { background: rgba(12, 17, 32, 0.55); }
+
+/* Vyhledávání (krok 2B) */
+.nalezy { margin: 0; padding-left: 1.4rem; }
+.nalez { padding: 0.75rem 0; border-bottom: 1px solid var(--line); }
+.nalez:last-child { border-bottom: none; }
+.nalez-zdroj { margin: 0 0 0.35rem; overflow-wrap: anywhere; }
+.nalez .text-uryvku { margin: 0; overflow-wrap: anywhere; }
+
+/* Asistent (krok 3A) */
+.odpoved { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 1.02rem; }
+.odpoved.nevim { color: var(--muted); }
+.odpoved sup a { text-decoration: none; font-weight: 600; padding: 0 0.1rem; }
+.zdroje { margin: 0; padding-left: 1.4rem; }
+.zdroj { padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
+.zdroj:last-child { border-bottom: none; }
+.zdroj .text-uryvku { margin: 0; overflow-wrap: anywhere; }
+.zdroj:target { background: var(--surface-2); }
+details.poslane { margin-top: 1rem; }
+details.poslane summary { cursor: pointer; }
+details.poslane ul { margin: 0.5rem 0 0; padding-left: 1.2rem; overflow-wrap: anywhere; }
+h3 { font-size: 1.05rem; margin: 1.25rem 0 0.5rem; }
+
+/* Kontrola vytěžených údajů člověkem (krok 4C) */
+input[type="date"], textarea {
+  width: 100%; font: inherit; padding: 0.6rem 0.7rem; border: 1px solid var(--line-strong);
+  border-radius: 8px; background: var(--surface-2); color: var(--ink);
+}
+textarea { resize: vertical; }
+textarea:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.formular-kontroly .pole { min-width: 0; }
+.formular-kontroly .pole-siroke { grid-column: 1 / -1; }
+.formular-kontroly [aria-invalid="true"] { border-color: var(--danger); border-width: 2px; }
+.chyba-pole { color: var(--danger); font-size: 0.9rem; font-weight: 600; margin: 0.25rem 0 0; }
+.opraveno { overflow-wrap: anywhere; }
+fieldset.polozky { border: 1px solid var(--line); border-radius: 8px; margin: 1.25rem 0 0; padding: 0.5rem 0.75rem 0.75rem; min-width: 0; }
+fieldset.polozky legend { font-weight: 600; padding: 0 0.25rem; }
+table.polozky input { width: 100%; }
+table.polozky th:nth-child(2), table.polozky th:nth-child(3) { width: 9rem; }
+.stav-kontrola-ceka, .stav-kontrola-rozpracovano { color: var(--ink); background: var(--surface-2); }
+.stav-kontrola-potvrzeno { color: var(--ok); border-color: var(--ok); background: var(--ok-soft); }
+.historie { margin: 0; padding-left: 1.2rem; }
+.historie > li { padding: 0.5rem 0; border-bottom: 1px solid var(--line); }
+.historie > li:last-child { border-bottom: none; }
+.historie-hlavicka { margin: 0; overflow-wrap: anywhere; }
+.historie-zmeny { margin: 0.25rem 0 0; padding-left: 1.2rem; overflow-wrap: anywhere; }
+.historie-zmeny del { color: var(--danger); }
+.historie-zmeny ins { color: var(--ok); text-decoration: none; font-weight: 600; }
+
+/* Živá ukázka (krok 6A) */
+.pruh-ukazky {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  background: var(--brand-soft);
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+}
+.ukazka-ucty {
+  margin: 1rem 0 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--paper);
+}
+.ukazka-ucty h2 { font-size: 1.1rem; margin: 0 0 0.25rem; }
+.ukazka-ucty ul { list-style: none; margin: 0.75rem 0 0; padding: 0; display: grid; gap: 0.75rem; }
+.ukazka-ucty form { margin: 0; }
+.ukazka-ucty button { width: 100%; }
+.ukazka-ucty .napoveda { margin: 0.25rem 0 0; overflow-wrap: anywhere; }

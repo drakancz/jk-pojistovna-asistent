@@ -1,0 +1,42 @@
+{% extends "zaklad.html" %}
+{% set aktivni = "hledani" %}
+{% block titulek %}Vyhledávání{% endblock %}
+{% block obsah %}
+<h1>Vyhledávání v dokumentech</h1>
+{% if chyba %}<div class="upozorneni chyba" role="alert">{{ chyba }}</div>{% endif %}
+
+<section class="karta" aria-labelledby="nadpis-otazka">
+  <h2 id="nadpis-otazka">Na co se chcete zeptat?</h2>
+  <form method="post" action="/hledani">
+    <input type="hidden" name="csrf" value="{{ sezeni.csrf }}">
+    <label for="otazka">Otázka</label>
+    <input id="otazka" name="otazka" type="text" required maxlength="{{ max_delka }}"
+           value="{{ otazka or '' }}" aria-describedby="napoveda-otazka">
+    <p class="napoveda" id="napoveda-otazka">Běžnou češtinou, třeba „Kolik dostanu za ukradené kolo ze sklepa?“ Hledá se podle významu i podle slov.</p>
+    <div class="akce"><button type="submit">Hledat</button></div>
+  </form>
+  <p class="tlumene">Zatím ukazuje jen nalezené úryvky. Odpověď s citací přidá asistent.</p>
+</section>
+
+{% if hledano %}
+<section class="karta" aria-labelledby="nadpis-vysledky">
+  <h2 id="nadpis-vysledky">Nalezené úryvky</h2>
+  {% if nalezy %}
+  <ol class="nalezy">
+    {% for n in nalezy %}
+    <li class="nalez">
+      <p class="nalez-zdroj">
+        {% if uzivatel.role == "ADMIN" %}<a href="/dokumenty/{{ n.dokument_id }}">{{ n.dokument }}</a>{% else %}<strong>{{ n.dokument }}</strong>{% endif %}
+        · strana {{ n.strana }}{% if n.nadpis %} · {{ n.nadpis }}{% endif %}
+      </p>
+      <p class="text-uryvku">{{ n.text }}</p>
+      <p class="napoveda">Nalezeno {% if n.vyznam and n.slova %}podle významu i slov{% elif n.vyznam %}podle významu{% else %}podle slov{% endif %}</p>
+    </li>
+    {% endfor %}
+  </ol>
+  {% else %}
+  <p>V dokumentech se nic nenašlo.</p>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}
