@@ -47,7 +47,12 @@ def _texty(obsah: list[dict]) -> list[str]:
             texty.append(b.get("title", ""))
             texty.extend(c.get("text", "") for c in b.get("content", []))
     return texty
-stav: dict = {"chyba": False, "posledni": None, "pocet": 0, "vytezeni": None, "pocet_vytezeni": 0}
+
+
+stav: dict = {
+    "chyba": False, "posledni": None, "pocet": 0, "vytezeni": None, "pocet_vytezeni": 0,
+    "prevod": None, "pocet_prevodu": 0,
+}
 # Vytěžení vrací údaje hlášení 11-hlaseni-1001-auto.png (dokumenty/hlaseni.json).
 UKAZKOVA = Path(__file__).resolve().parents[1] / "dokumenty" / "hlaseni.json"
 VYTEZENE = json.loads(UKAZKOVA.read_text(encoding="utf-8"))[0]["spravne_udaje"]
@@ -68,15 +73,46 @@ def _odpoved_asistenta(vysledky: list[dict], otazka: str) -> list[dict]:
         "end_block_index": 1,
     }
     return [
-        {"type": "text", "text": "Podle dokumentů: "},
+        # Markdown jako skutečný model; stránka ho má odstranit (bez_markdownu).
+        {"type": "text", "text": "## Shrnutí\n**Podle dokumentů:** "},
         {"type": "text", "text": "odpověď napodobeniny z prvního úryvku.", "citations": [citace]},
     ]
+
+
+def _prevod_otazky(telo: dict):
+    """Převod otázky do slov dokumentů (asistent.hledaci_slova): vlastní
+    počítadlo, ať nepřepíše „posledni“ odpovědi. Vrací prázdný text, takže
+    hledání v testech běží jen podle otázky jako dřív."""
+    text = telo["messages"][0]["content"]
+    stav["pocet_prevodu"] += 1
+    stav["prevod"] = {
+        "model": telo.get("model"),
+        "osobni_udaje": bool(EMAIL.search(text) or TELEFON.search(text)),
+        "nahrazeno": "[e-mail]" in text or "[telefon]" in text,
+    }
+    if stav["chyba"]:
+        return JSONResponse(
+            {"type": "error", "error": {"type": "invalid_request_error", "message": "napodobenina: chyba"}},
+            status_code=400,
+        )
+    return {
+        "id": f"msg_prevod_{stav['pocet_prevodu']}",
+        "type": "message",
+        "role": "assistant",
+        "model": telo.get("model"),
+        "content": [{"type": "text", "text": ""}],
+        "stop_reason": "end_turn",
+        "stop_sequence": None,
+        "usage": {"input_tokens": 50, "output_tokens": 10},
+    }
 
 
 @app.post("/v1/messages")
 async def zprava(request: Request):
     telo = await request.json()
     obsah = telo["messages"][0]["content"]
+    if str(telo.get("system", "")).startswith("Přepiš otázku"):
+        return _prevod_otazky(telo)
     vysledky = [b for b in obsah if b["type"] == "search_result"]
     zaznam = {
         "model": telo.get("model"),
@@ -200,6 +236,8 @@ def posledni():
         "pocet": stav["pocet"],
         "vytezeni": stav["vytezeni"],
         "pocet_vytezeni": stav["pocet_vytezeni"],
+        "prevod": stav["prevod"],
+        "pocet_prevodu": stav["pocet_prevodu"],
         "davka": stav.get("davka"),
     }
 

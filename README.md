@@ -16,6 +16,12 @@ Administrátor“.
 
 ## Snímky
 
+![Odpověď asistenta klientce podle její smlouvy, s citacemi](docs/snimky/asistent.png)
+
+_Skutečná odpověď modelu Claude Haiku na ukázkových datech: klientka se
+ptá na „své auto“ a asistent odpoví podle její smlouvy, ne jen obecně
+podle podmínek._
+
 | Vyhledávání v dokumentech              | Dokumenty (Administrátor)              |
 | -------------------------------------- | -------------------------------------- |
 | ![Vyhledávání](docs/snimky/hledani.png) | ![Dokumenty](docs/snimky/dokumenty.png) |
@@ -24,8 +30,8 @@ Administrátor“.
 | ------------------------------------------------- | ------------------------------------------------ |
 | ![Kontrola hlášení](docs/snimky/hlaseni-kontrola.png) | ![Klient v telefonu](docs/snimky/klient-telefon.png) |
 
-_Snímky jsou z testovacího prostředí, kde místo AI odpovídá napodobenina
-(údaje ve formuláři vyplnila ona). Snímky ze živé ukázky doplním._
+_Snímky pod odpovědí jsou z testovacího prostředí, kde místo AI odpovídá
+napodobenina (údaje ve formuláři vyplnila ona)._
 
 ## Co umí
 
@@ -61,6 +67,26 @@ _Snímky jsou z testovacího prostředí, kde místo AI odpovídá napodobenina
   způsoby a navíc využije číslo smlouvy z otázky. Úprava podle měření
   zvedla počet trefených otázek z 23 na 25. Kde hledání chybuje, je v [evaluaci](docs/evaluace.md) popsané
   i s náměty na zlepšení.
+- **Odpovědi změřené naostro.** Ze 35 otázek odpověděl asistent správně
+  (správný údaj i citace správné stránky) u 32–34 (91–97 %) ve čtyřech
+  bězích; model mezi běhy kolísá. „Nevím“ u otázek mimo dokumenty 5 z 5,
+  cizí smlouva neodešla ani jednou. Jeden běh stojí asi 0,04 $. Otázka,
+  která padá pořád, míří do tabulky, kterou čtení PDF rozsype do řádků
+  — další krok je lepší čtení tabulek.
+- **Opravy podle měření, ne podle dojmu.** Postupně z 22 na 32–34 z 35:
+  - model přemýšlel i s vypnutým přemýšlením a odpověď se uřízla
+    (22 → 28);
+  - zákazník píše „ukradnou auto“, podmínky „odcizení vozidla“: malý
+    model teď otázku před hledáním převede do slov dokumentů (zlomek
+    haléře za otázku; když AI nejde, hledá se jako dřív);
+  - snímek skutečné odpovědi odhalil, že na „mám u svého auta…“ hledání
+    nenašlo smlouvu klientky — teď k nalezeným přidá její smlouvu;
+  - u tří otázek bylo přísné samo měření (čekalo „6 týdnů“, asistent
+    napsal „šest týdnů“) — opravené a u každé je v sadě napsané proč.
+- **Vytěžení hlášení škody:** na pěti ukázkových skenech AI
+  vyplnila správně 110 ze 110 údajů. Měření odhalilo i chybu, kterou
+  napodobenina v testech schovala: skutečné API odmítlo příliš složité
+  schéma odpovědi.
 - **Člověk potvrzuje, AI navrhuje.** Návrh od AI se nikdy nepřepisuje,
   opravy člověka se ukládají zvlášť. Díky tomu jde měřit přesnost AI i po
   kontrole. Dva lidé si souběžnou opravou nepřepíšou práci.
@@ -100,7 +126,7 @@ kromě odpovědí asistenta a čtení skenů.
 docker compose --profile test run --rm e2e
 ```
 
-**109 testů** s vlastní databází a serverem; hesla účtů se vymyslí při
+**110 testů** s vlastní databází a serverem; hesla účtů se vymyslí při
 každém běhu. Místo Anthropicu odpovídá napodobenina, takže nic neodchází
 ven a test zjistí, co by k AI odešlo. Hlídají hlavně oprávnění (klient se
 k cizí smlouvě nedostane ani přes asistenta), podvržené soubory, limity,

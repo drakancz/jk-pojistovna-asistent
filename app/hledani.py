@@ -52,6 +52,13 @@ NEHLEDAT = set(
     nebo ale kdyz tak uz jen ani by aby""".split()
 )
 
+# Přivlastňovací zájmena bez diakritiky: klient se ptá na „svou“ smlouvu.
+SVOJE = set(
+    """muj moje meho memu mem mym moji mou mych mymi ma me
+    svuj svoje sveho svemu svem svym svoji svou svych svymi sva sve""".split()
+)
+VLASTNICH_NAVIC = 3  # kolik úryvků vlastní smlouvy se přidá k nalezeným
+
 _model: "_Model | None" = None
 _zamek = threading.Lock()
 
@@ -245,37 +252,92 @@ class Nalez:
     slova: bool  # našel ho fulltext
 
 
-def hledej(db: Session, otazka: str, smi_videt: ColumnElement[bool], pocet: int = 5) -> list[Nalez]:
+def pta_se_na_svoje(otazka: str) -> bool:
+    return any(slovo in SVOJE for slovo in re.findall(r"\w+", bez_diakritiky(otazka)))
+
+
+def _vlastni_smlouvy(
+    db: Session, zaklad, nejlepsi: list[int], skore: dict[int, float], otisk: np.ndarray | None
+) -> list[int]:
+    """Úryvky vlastních smluv ke stejnému pojištění jako nalezené podmínky.
+
+    „Mám u svého auta krytý střet se zvěří?“ našlo jen obecné podmínky
+    (obě varianty), ne smlouvu, kde stojí, kterou variantu klientka má —
+    asistent jí pak neuměl odpovědět (snímek živé odpovědi 10. 11. 2026).
+    Volá se jen pro klienta: `zaklad` má podmínku oprávnění, takže
+    smlouvy v něm jsou vždy jen jeho.
+    """
+    druhy_pojisteni = set(
+        db.scalars(
+            select(Dokument.pojisteni).join(Uryvek, Uryvek.dokument_id == Dokument.id).where(Uryvek.id.in_(nejlepsi))
+        )
+    )
+    if not druhy_pojisteni:
+        return []
+    dotaz = zaklad.where(Dokument.druh == DruhDokumentu.SMLOUVA, Dokument.pojisteni.in_(druhy_pojisteni))
+    if otisk is not None:
+        dotaz = dotaz.order_by(Uryvek.vektor.cosine_distance(otisk).nulls_last(), Uryvek.id)
+    else:
+        dotaz = dotaz.order_by(Uryvek.id)
+    kandidati = list(db.scalars(dotaz.limit(KANDIDATU)))
+    # Nejdřív to, co hledání samo ohodnotilo, pak podle významu.
+    poradi_vyznamu = {u: misto for misto, u in enumerate(kandidati)}
+    kandidati.sort(key=lambda i: (-skore.get(i, 0.0), poradi_vyznamu[i]))
+    return [i for i in kandidati if i not in nejlepsi][:VLASTNICH_NAVIC]
+
+
+def _podle_vyznamu(db: Session, zaklad, otisk: np.ndarray | None) -> list[int]:
+    if otisk is None:
+        return []
+    return list(
+        db.scalars(
+            zaklad.where(Uryvek.vektor.is_not(None)).order_by(Uryvek.vektor.cosine_distance(otisk)).limit(KANDIDATU)
+        )
+    )
+
+
+def hledej(
+    db: Session,
+    otazka: str,
+    smi_videt: ColumnElement[bool],
+    pocet: int = 5,
+    klient: bool = False,
+    doplnek: str | None = None,
+) -> list[Nalez]:
+    """`klient=True`: otázka na „svou“ smlouvu přidá k nalezeným až
+    `VLASTNICH_NAVIC` úryvků klientových smluv (`_vlastni_smlouvy`).
+
+    `doplnek`: otázka převedená do slov dokumentů (`asistent.hledaci_slova`).
+    Hledá se jím podle významu i slov jako dalšími dvěma pořadími; původní
+    otázka zůstává, takže špatný převod hledání nezhorší víc než o jedno
+    pořadí ze čtyř."""
     otazka = otazka.strip()[:MAX_OTAZKA]
     if not otazka:
         return []
+    doplnek = (doplnek or "").strip()[:MAX_OTAZKA]
     zaklad = (
         select(Uryvek.id)
         .join(Dokument, Dokument.id == Uryvek.dokument_id)
         .where(Dokument.stav_cteni == StavCteni.PRECTENO, smi_videt)
     )
 
-    (otisk,) = otisky([otazka])
-    podle_vyznamu: list[int] = []
-    if otisk is not None:
-        podle_vyznamu = list(
-            db.scalars(
-                zaklad.where(Uryvek.vektor.is_not(None))
-                .order_by(Uryvek.vektor.cosine_distance(otisk))
-                .limit(KANDIDATU)
-            )
-        )
-
+    otisk, otisk_doplnku = otisky([otazka, doplnek]) if doplnek else (otisky([otazka])[0], None)
+    podle_vyznamu = _podle_vyznamu(db, zaklad, otisk)
     podle_slov = _podle_slov(db, zaklad, slova_otazky(otazka))
     podle_cisla = _podle_cisla_dokumentu(db, zaklad, otazka, otisk)
+    poradi = [podle_vyznamu, podle_slov, podle_cisla]
+    if doplnek:
+        poradi += [_podle_vyznamu(db, zaklad, otisk_doplnku), _podle_slov(db, zaklad, slova_otazky(doplnek))]
 
     skore: dict[int, float] = {}
-    for poradi_ in (podle_vyznamu, podle_slov, podle_cisla):
+    for poradi_ in poradi:
         for misto, uryvek_id in enumerate(poradi_):
             skore[uryvek_id] = skore.get(uryvek_id, 0.0) + 1 / (RRF_K + misto)
     nejlepsi = sorted(skore, key=lambda i: (-skore[i], i))[:pocet]
     if not nejlepsi:
         return []
+    if klient and pta_se_na_svoje(otazka):
+        nejlepsi += _vlastni_smlouvy(db, zaklad, nejlepsi, skore, otisk)
 
     radky = {
         u.id: (u, nazev)

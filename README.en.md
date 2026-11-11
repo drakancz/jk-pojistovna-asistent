@@ -17,6 +17,12 @@ claims handler / administrator).
 
 ## Screenshots
 
+![The assistant answering a client from her own contract, with citations](docs/snimky/asistent.png)
+
+_A real Claude Haiku answer on the demo data: the client asks about “my
+car” and the assistant answers from her contract, not just generally from
+the policy terms._
+
 | Document search                          | Documents (administrator)               |
 | ---------------------------------------- | --------------------------------------- |
 | ![Search](docs/snimky/hledani.png)       | ![Documents](docs/snimky/dokumenty.png) |
@@ -25,9 +31,8 @@ claims handler / administrator).
 | ------------------------------------------------------ | ---------------------------------------------------- |
 | ![Claim review](docs/snimky/hlaseni-kontrola.png)      | ![Client on a phone](docs/snimky/klient-telefon.png) |
 
-_The screenshots come from the test environment, where a stand-in answers
-instead of the AI (it filled in the form data). Screenshots from the live
-demo will follow._
+_The screenshots below the answer come from the test environment, where
+a stand-in answers instead of the AI (it filled in the form data)._
 
 ## What it does
 
@@ -66,6 +71,29 @@ demo will follow._
   both and also uses a contract number from the question. Measurement-driven
   tuning raised the hit count from 23 to 25. Where search fails is described in the
   [evaluation](docs/evaluace.md), with ideas for improvement.
+- **Answers measured against the real model.** Of 35 questions, the
+  assistant answered correctly (right fact and a citation of the right
+  page) 32–34 times (91–97%) across four runs; the model varies between
+  runs. “I don't know” for questions outside the documents: 5 of 5; another
+  client's contract was never sent. One run costs about $0.04. The question
+  that keeps failing points into a table that PDF reading scatters into
+  separate lines — better table reading is the next step.
+- **Fixes driven by measurement, not impressions.** Step by step from 22
+  to 32–34 of 35:
+  - the model kept thinking even with thinking disabled and the answer got
+    cut off (22 → 28);
+  - customers write “they steal my car”, the terms say “theft of the
+    vehicle”: a small model now rewrites the question into the documents'
+    wording before searching (a fraction of a cent per question; if the AI
+    is unavailable, search works as before);
+  - a screenshot of a real answer revealed that for “is my car covered…”,
+    search did not find the client's contract — it now adds her contract;
+  - for three questions the measurement itself was too strict (it expected
+    “6 týdnů”, the assistant wrote “šest týdnů”, i.e. six weeks in words) —
+    fixed, with the reason noted in the question set.
+- **Claim extraction:** on five demo scans the AI filled in 110 of 110
+  fields correctly. Measuring also caught a bug the test stand-in had
+  hidden: the real API rejected an overly complex response schema.
 - **The person confirms, the AI suggests.** The AI's suggestion is never
   overwritten; human corrections are stored separately. That makes it
   possible to measure the AI's accuracy even after review. Two people
@@ -107,7 +135,7 @@ and reading scans.
 docker compose --profile test run --rm e2e
 ```
 
-**109 tests** with their own database and server; account passwords are
+**110 tests** with their own database and server; account passwords are
 generated for every run. A stand-in answers instead of Anthropic, so
 nothing leaves the machine and the test can see what would have been sent
 to the AI. They mainly guard permissions (a client cannot reach another

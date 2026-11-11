@@ -64,8 +64,10 @@ def _normalizuj(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip().lower()
 
 
-def obsahuje(text: str, udaj: str) -> bool:
-    return _normalizuj(udaj) in _normalizuj(text)
+def obsahuje(text: str, udaj: str | tuple[str, ...]) -> bool:
+    """Údaj jako n-tice = stačí kterákoli varianta („6 týdnů“ / „šest týdnů“)."""
+    varianty = udaj if isinstance(udaj, tuple) else (udaj,)
+    return any(_normalizuj(v) in _normalizuj(text) for v in varianty)
 
 
 def _uzivatele(db: Session) -> dict[str, Uzivatel]:
@@ -80,16 +82,38 @@ def _trefa(nalez: hledani.Nalez | asistent.Zdroj, zdroje: list) -> bool:
     return any(nalez.dokument == dokument and nalez.strana == strana for dokument, strana in zdroje)
 
 
-def _hledej(db: Session, uzivatele: dict[str, Uzivatel], otazka: dict, pocet: int) -> list[hledani.Nalez]:
-    return hledani.hledej(db, otazka["otazka"], hledani.viditelne_dokumenty(uzivatele[otazka["kdo"]]), pocet=pocet)
+def _hledej(
+    db: Session, uzivatele: dict[str, Uzivatel], otazka: dict, pocet: int, slova: dict[str, str | None] | None = None
+) -> list[hledani.Nalez]:
+    kdo = uzivatele[otazka["kdo"]]
+    return hledani.hledej(
+        db,
+        otazka["otazka"],
+        hledani.viditelne_dokumenty(kdo),
+        pocet=pocet,
+        klient=kdo.role == Role.KLIENT,
+        doplnek=(slova or {}).get(otazka["id"]),
+    )
 
 
-def vyhledavani(db: Session, sada: list[dict] = SADA) -> list[Vysledek]:
+def prevod_otazek(sada: list[dict] = SADA) -> tuple[dict[str, str | None], int, int]:
+    """Otázky převedené do slov dokumentů, stejně jako u skutečného
+    asistenta (`asistent.hledaci_slova`). Jen s klíčem; bez něj se měří
+    hledání podle samotné otázky (zdarma)."""
+    slova: dict[str, str | None] = {}
+    vstup = vystup = 0
+    for o in sada:
+        slova[o["id"]], v, w = asistent.hledaci_slova(o["otazka"])
+        vstup, vystup = vstup + v, vystup + w
+    return slova, vstup, vystup
+
+
+def vyhledavani(db: Session, sada: list[dict] = SADA, slova: dict[str, str | None] | None = None) -> list[Vysledek]:
     uzivatele = _uzivatele(db)
     vysledky = []
     for o in sada:
         v = Vysledek(id=o["id"], druh=o["druh"], kdo=o["kdo"], otazka=o["otazka"])
-        nalezy = _hledej(db, uzivatele, o, NA_PRVNICH)
+        nalezy = _hledej(db, uzivatele, o, NA_PRVNICH, slova)
         if o["druh"] == "odpoved":
             v.poradi = next((i for i, n in enumerate(nalezy, 1) if _trefa(n, o["zdroje"])), None)
         if o["kdo"] == "petra":
@@ -116,7 +140,8 @@ def _ohodnot(v: Vysledek, o: dict, odpoved: asistent.Odpoved) -> None:
 
 
 def odpovedi(db: Session, vysledky: list[Vysledek], sada: list[dict] = SADA, primo: bool = False,
-             cekat_max_s: int = 3600) -> dict:
+             cekat_max_s: int = 3600, slova: dict[str, str | None] | None = None,
+             spotreba_prevodu: tuple[int, int] = (0, 0)) -> dict:
     """Doplní k výsledkům odpovědi asistenta a vrátí spotřebu tokenů."""
     if not asistent.je_zapnuty():
         raise SystemExit("Odpovědi potřebují klíč k Anthropicu (ANTHROPIC_API_KEY). Vyhledávání běží i bez něj.")
@@ -125,7 +150,7 @@ def odpovedi(db: Session, vysledky: list[Vysledek], sada: list[dict] = SADA, pri
     otazky = {o["id"]: o for o in sada}
     pozadavky: dict[str, tuple[dict, list[hledani.Nalez]]] = {}
     for o in sada:
-        nalezy = _hledej(db, uzivatele, o, asistent.POCET_URYVKU)
+        nalezy = _hledej(db, uzivatele, o, asistent.POCET_URYVKU, slova)
         if not nalezy:  # asistent by Claude vůbec nevolal a řekl „nevím“
             _ohodnot(podle_id[o["id"]], o, asistent.Odpoved(casti=[asistent.Cast(text=asistent.NEVIM)],
                                                              zdroje=[], poslane=[], nevim=True))
@@ -160,9 +185,14 @@ def odpovedi(db: Session, vysledky: list[Vysledek], sada: list[dict] = SADA, pri
                 podle_id[radek.custom_id].chyba = radek.result.type
                 podle_id[radek.custom_id].spravne = False
     sleva = 0.5 if not primo else 1.0
+    # Převod otázek jde jednotlivě (bez slevy dávky), proto se počítá zvlášť.
+    pv, pw = spotreba_prevodu
     spotreba["cena_usd"] = round(
-        (spotreba["vstup"] * CENA_VSTUP + spotreba["vystup"] * CENA_VYSTUP) / 1_000_000 * sleva, 4
+        ((spotreba["vstup"] * CENA_VSTUP + spotreba["vystup"] * CENA_VYSTUP) * sleva
+         + pv * CENA_VSTUP + pw * CENA_VYSTUP) / 1_000_000, 4
     )
+    spotreba["vstup"] += pv
+    spotreba["vystup"] += pw
     return spotreba
 
 
@@ -247,8 +277,15 @@ def zprava_md(s: dict, vysledky: list[Vysledek]) -> str:
 
 
 def spust(db: Session, s_odpovedmi: bool, primo: bool, vystup: Path | None, zprava: Path | None) -> dict:
-    vysledky = vyhledavani(db)
-    spotreba = odpovedi(db, vysledky, primo=primo) if s_odpovedmi else None
+    if s_odpovedmi:
+        if not asistent.je_zapnuty():
+            raise SystemExit("Odpovědi potřebují klíč k Anthropicu (ANTHROPIC_API_KEY). Vyhledávání běží i bez něj.")
+        slova, pv, pw = prevod_otazek()
+        vysledky = vyhledavani(db, slova=slova)
+        spotreba = odpovedi(db, vysledky, primo=primo, slova=slova, spotreba_prevodu=(pv, pw))
+    else:
+        vysledky = vyhledavani(db)
+        spotreba = None
     s = souhrn(vysledky, spotreba)
     if vystup:
         vystup.parent.mkdir(parents=True, exist_ok=True)

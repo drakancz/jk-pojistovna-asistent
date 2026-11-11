@@ -82,6 +82,17 @@ def test_klient_najde_svou_smlouvu(prihlas):
     over_jen_povolene(prihlas, poslane, "Petra Malá")
 
 
+def test_otazka_na_svou_smlouvu_bez_cisla(prihlas):
+    # „Svého auta“ bez čísla smlouvy: hledání samo našlo jen podmínky (obě
+    # varianty) a asistent nevěděl, kterou má klientka (10. 11. 2026).
+    # K nalezeným se proto přidá její smlouva ke stejnému pojištění.
+    page = prihlas("petra")
+    poslane = zeptej_se(page, "Mám u svého auta krytý střet se zvěří?")
+    assert any(n.startswith(PETRA[0]) for n in poslane), poslane
+    assert not any(n.startswith(TOMAS) for n in poslane), poslane
+    over_jen_povolene(prihlas, poslane, "Petra Malá")
+
+
 def test_otazka_na_cizi_smlouvu_ji_opravdu_najde(prihlas):
     # Kontrola testu níž: stejná otázka u likvidace Benešovy smlouvy najde.
     # Bez toho by „klient je nedostal“ mohlo projít jen proto, že je

@@ -26,6 +26,16 @@ jestli pojištění navazuje.
    jako skutečný asistent (`asistent.parametry()`), poslané hromadnou
    dávkou (Message Batches API, **o 50 % levnější**, výsledek do hodiny).
    Jde mimo denní limit asistenta a do databáze nic nezapisuje.
+   S klíčem se před hledáním každá otázka převede do slov dokumentů
+   (`asistent.hledaci_slova()`, od 10. 11. 2026) jako u skutečného
+   asistenta, takže i vyhledávací čísla odpovídají tomu, co dostane
+   uživatel. Bez klíče se měří hledání jen podle otázky.
+
+**Výsledky 10. 11. 2026:** čtyři běhy naostro 34, 32, 32, 34 z 35.
+Dlouhodobě padá „Kolik zaplatíte za ošetření zubů v zahraničí?“ —
+odpověď je v tabulce limitů, kterou čtení PDF rozsype do řádků
+(„akutní zubní ošetření / 10 000 Kč / 10 000 Kč“). Námět: číst tabulky
+po řádcích („akutní zubní ošetření: EVROPA 10 000 Kč, SVĚT 10 000 Kč“).
 
 ## Jak spustit
 

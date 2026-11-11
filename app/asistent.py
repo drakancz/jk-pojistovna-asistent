@@ -20,6 +20,7 @@ před odesláním nahradí (`app.anonymizace`, krok 5B).
 """
 
 import logging
+import re
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
@@ -31,7 +32,7 @@ from sqlalchemy.orm import Session
 from app import hledani
 from app.anonymizace import bez_osobnich_udaju
 from app.db import nove_sezeni
-from app.modely import DotazAi, Uzivatel
+from app.modely import DotazAi, Role, Uzivatel
 from app.nastaveni import nastaveni
 
 log = logging.getLogger(__name__)
@@ -189,10 +190,14 @@ def parametry(otazka: str, nalezy: list[hledani.Nalez]) -> dict:
     měřila přesně to, co dostane uživatel."""
     return {
         "model": MODEL,
-        "max_tokens": 1024,
+        # Haiku 5.5 přemýšlí i s `thinking: disabled` a přemýšlení se počítá
+        # do max_tokens. S limitem 1024 se odpověď uřízla před citacemi
+        # a ukázalo se „nevím“ (evaluace 9. 11.: 11 z 13 chyb). Přemýšlení
+        # necháváme adaptivní, úsilí řídí effort a limit má rezervu
+        # (4096 výstupních tokenů Haiku ≈ 0,002 $).
+        "max_tokens": 4096,
         "system": POKYNY,
-        # Odpověď z hotových úryvků nepotřebuje přemýšlení — nižší cena.
-        "thinking": {"type": "disabled"},
+        "thinking": {"type": "adaptive"},
         "output_config": {"effort": "medium"},
         "messages": [
             {
@@ -204,6 +209,41 @@ def parametry(otazka: str, nalezy: list[hledani.Nalez]) -> dict:
             }
         ],
     }
+
+
+POKYNY_HLEDANI = """Přepiš otázku klienta pojišťovny do slov, kterými píšou \
+pojistné podmínky a smlouvy (například „ukradnou auto“ → „odcizení vozidla“, \
+„vykradou byt“ → „krádež vloupáním“, „jak dlouho“ → „nejvýše, lhůta, doba“). \
+Vrať jen 3 až 10 klíčových slov a sousloví oddělených čárkou, bez vysvětlení. \
+Čísla smluv z otázky zachovej. Nic jiného nepiš."""
+
+
+def parametry_hledani(otazka: str) -> dict:
+    """Převod otázky do slov dokumentů (10. 11. 2026). Zákazník píše
+    „ukradnou auto“, podmínky „odcizení vozidla“ — hledání pak správný
+    článek nenašlo vůbec (evaluace: 3 z 8 chyb). Model dostane jen otázku,
+    žádné dokumenty, takže tu nehrají roli oprávnění."""
+    return {
+        "model": MODEL,
+        "max_tokens": 1024,  # rezerva na přemýšlení, které Haiku dělá vždy
+        "system": POKYNY_HLEDANI,
+        "thinking": {"type": "adaptive"},
+        "output_config": {"effort": "low"},
+        "messages": [{"role": "user", "content": bez_osobnich_udaju(otazka)}],
+    }
+
+
+def hledaci_slova(otazka: str) -> tuple[str | None, int, int]:
+    """Slova dokumentů k otázce a spotřeba (vstup, výstup). Když AI nejde,
+    vrátí None a hledá se jen podle otázky jako dřív — kvůli převodu
+    otázka nikdy nespadne."""
+    try:
+        r = _klient().messages.create(**parametry_hledani(otazka))
+    except anthropic.APIError as e:
+        log.warning("Převod otázky pro hledání selhal: %s", type(e).__name__)
+        return None, 0, 0
+    text = " ".join(b.text for b in r.content if b.type == "text").strip()[: hledani.MAX_OTAZKA]
+    return text or None, r.usage.input_tokens, r.usage.output_tokens
 
 
 def _zavolej(otazka: str, nalezy: list[hledani.Nalez]):
@@ -219,6 +259,14 @@ def _zavolej(otazka: str, nalezy: list[hledani.Nalez]):
         raise ChybaAsistenta("Služba AI není dostupná. Otázka se nepočítá do limitu.") from e
 
 
+def bez_markdownu(text: str) -> str:
+    """Stránka ukazuje odpověď jako prostý text: tučné písmo („**…**“)
+    a nadpisy („## …“) by v ní zůstaly jako hvězdičky a mřížky. Model je
+    píše i přes pokyn (snímek živé odpovědi 10. 11. 2026)."""
+    text = re.sub(r"\*\*|__", "", text)
+    return re.sub(r"(?m)^#{1,6}\s+", "", text)
+
+
 def sloz(odpoved, nalezy: list[hledani.Nalez]) -> Odpoved:
     """Odpověď Claude → části textu s čísly zdrojů. Bez citace = nevím."""
     poslane = {f"uryvek:{n.uryvek_id}": n for n in nalezy}
@@ -228,7 +276,7 @@ def sloz(odpoved, nalezy: list[hledani.Nalez]) -> Odpoved:
     for blok in odpoved.content:
         if blok.type != "text":
             continue
-        cast = Cast(text=blok.text)
+        cast = Cast(text=bez_markdownu(blok.text))
         for citace in getattr(blok, "citations", None) or []:
             zdroj = getattr(citace, "source", None)
             nalez = poslane.get(zdroj or "")
@@ -269,16 +317,19 @@ def zeptej_se(
     if isinstance(rezervace, str):
         raise LimitVycerpan(rezervace)
     try:
-        nalezy = hledani.hledej(db, otazka, smi_videt, pocet=POCET_URYVKU)
+        slova, vstup, vystup = hledaci_slova(otazka)
+        nalezy = hledani.hledej(
+            db, otazka, smi_videt, pocet=POCET_URYVKU, klient=uzivatel.role == Role.KLIENT, doplnek=slova
+        )
         if not nalezy:
-            # Není z čeho odpovídat — Claude se nevolá a dotaz se nepočítá.
+            # Není z čeho odpovídat — odpověď se nevolá a dotaz se nepočítá.
             _zrus_rezervaci(rezervace)
             return Odpoved(casti=[Cast(text=NEVIM)], zdroje=[], poslane=[], nevim=True)
         odpoved = _zavolej(otazka, nalezy)
     except BaseException:
         _zrus_rezervaci(rezervace)
         raise
-    _zapis_spotrebu(rezervace, odpoved.usage.input_tokens, odpoved.usage.output_tokens)
+    _zapis_spotrebu(rezervace, vstup + odpoved.usage.input_tokens, vystup + odpoved.usage.output_tokens)
     if odpoved.stop_reason == "refusal":
         raise ChybaAsistenta("Asistent na tuhle otázku neodpoví.")
     return sloz(odpoved, nalezy)

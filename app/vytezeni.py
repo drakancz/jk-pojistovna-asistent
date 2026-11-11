@@ -96,14 +96,43 @@ class UdajeHlaseni(BaseModel):
         return self
 
 
-SCHEMA = UdajeHlaseni.model_json_schema()
+def _schema_pro_ai() -> dict:
+    """JSON schéma pro strukturovaný výstup. Anthropic dovolí nejvýš 16
+    nepovinných (union) polí, `UdajeHlaseni` jich má 21 — prostý text proto
+    AI posílá jako povinný řetězec a chybějící údaj je "" (validátor výš
+    z prázdného textu udělá None). Nepovinná zůstávají jen pole s pevným
+    tvarem (výčet, datum, číslo, ano/ne). Zjištěno měřením naostro 10. 11.
+    2026 — napodobenina v testech schéma neověřuje (hlídá to test)."""
+    schema = UdajeHlaseni.model_json_schema()
+    for vlastnost in schema["properties"].values():
+        varianty = vlastnost.get("anyOf")
+        if varianty and {"type": "null"} in varianty:
+            ostatni = [v for v in varianty if v != {"type": "null"}]
+            if ostatni == [{"type": "string"}]:
+                vlastnost.pop("anyOf")
+                vlastnost.pop("default", None)
+                vlastnost["type"] = "string"
+    return schema
+
+
+def pocet_nepovinnych(schema: dict) -> int:
+    """Kolik polí (i ve vnořených objektech) má union typ — limit Anthropicu je 16."""
+    pocet = 0
+    for objekt in [schema, *schema.get("$defs", {}).values()]:
+        for vlastnost in objekt.get("properties", {}).values():
+            if "anyOf" in vlastnost or isinstance(vlastnost.get("type"), list):
+                pocet += 1
+    return pocet
+
+
+SCHEMA = _schema_pro_ai()
 
 POKYNY = """Z přepisu naskenovaného formuláře „Hlášení pojistné události“ JK pojišťovny \
 vyplň údaje podle zadaného schématu.
 
 Pravidla:
 1. Ber jen to, co v přepisu opravdu stojí. Nic nedomýšlej ani neopravuj; chybějící, \
-prázdné nebo nečitelné pole je null.
+prázdné nebo nečitelné textové pole je prázdný řetězec "", ostatní pole null.
 2. Přeškrtnutý text (~~takto~~) neplatí; platí hodnota, kterou pisatel napsal místo něj.
 3. Zaškrtnuté políčko je [x], prázdné [ ]. Druh pojištění: auto = havarijní pojištění \
 vozidla, domacnost = pojištění domácnosti, cestovni = cestovní pojištění. Policie: true, \
@@ -183,10 +212,11 @@ def _zavolej(text: str) -> tuple[UdajeHlaseni, int, int]:
     try:
         odpoved = _klient().messages.create(
             model=MODEL,
-            max_tokens=4000,
+            # Haiku 5.5 počítá přemýšlení do max_tokens — rezerva, ať se JSON
+            # neuřízne (stejné poučení jako u asistenta, 10. 11. 2026).
+            max_tokens=8000,
             system=POKYNY,
-            # Opsat údaje z hotového přepisu nepotřebuje přemýšlení — nižší cena.
-            thinking={"type": "disabled"},
+            thinking={"type": "adaptive"},
             output_config={"effort": "medium", "format": {"type": "json_schema", "schema": SCHEMA}},
             messages=[{"role": "user", "content": [{"type": "text", "text": f"<prepis>\n{text}\n</prepis>"}]}],
         )

@@ -24,6 +24,10 @@ def test_kontakt_v_otazce_se_nahradi(prihlas):
     )
     assert poslane["osobni_udaje"] is False
     assert poslane["nahrazeno"] is True
+    # Převod otázky do slov dokumentů je samostatné volání AI — i tam bez kontaktu.
+    prevod = napodobenina("/_posledni")["prevod"]
+    assert prevod["osobni_udaje"] is False
+    assert prevod["nahrazeno"] is True
     # Odpověď z dokumentů funguje dál, jen bez kontaktu.
     expect(page.locator("#odpoved")).to_contain_text("odpověď napodobeniny")
 

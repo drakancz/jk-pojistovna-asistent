@@ -8,7 +8,7 @@ Druhy otázek:
 
 - **odpoved** — odpověď v dokumentech je. `udaje` jsou texty, které musí
   odpověď obsahovat (porovnává se bez ohledu na velikost písmen a druh
-  mezer), `zdroje` jsou dvojice (dokument, strana), z nichž stačí trefit
+  mezer; n-tice = stačí kterákoli varianta), `zdroje` jsou dvojice (dokument, strana), z nichž stačí trefit
   jednu: tam hledání musí najít úryvek a na ni má asistent citovat.
   Prázdné `udaje` = hodnotí se jen citace (odpověď bez čísla).
 - **nevim** — odpověď v dokumentech není, asistent má říct „nevím“.
@@ -45,7 +45,9 @@ SADA: list[dict] = [
     _o("auto-zver", "Je kryto, když srazím srnu?", ["PLUS"], (AUTO, 1)),
     _o("auto-totalka", "Kdy se škoda na autě bere jako totální?", ["80 %"], (AUTO, 1)),
     _o("auto-klice", "Zaplatíte krádež auta, když jsem v něm nechal klíčky?", [], (AUTO, 2)),
-    _o("auto-vypoved", "Jak a kdy vypovědět pojištění auta?", ["6 týdnů"], (AUTO, 3)),
+    # Podmínky píšou „šest týdnů“ slovy; s číslicí jen se správná odpověď
+    # počítala jako chyba (10. 11. 2026).
+    _o("auto-vypoved", "Jak a kdy vypovědět pojištění auta?", [("6 týdnů", "šest týdnů")], (AUTO, 3)),
     _o("auto-bonus", "Kolik je sleva za jízdu bez nehody?", ["30 %"], (AUTO, 3)),
     _o("auto-policie-nehoda", "Kdy musím k nehodě volat policii?", ["100 000"], (AUTO, 2)),
     # --- Domácnost (podmínky) ---
@@ -64,13 +66,22 @@ SADA: list[dict] = [
     _o("cest-zuby", "Kolik zaplatíte za ošetření zubů v zahraničí?", ["10 000"], (CEST, 1)),
     # --- Informace ---
     _o("info-udaje", "Jak dlouho uchováváte moje osobní údaje?", ["10 let"], (INFO, 3)),
-    _o("info-vyplata", "Za jak dlouho po vyšetření škody dostanu peníze?", ["15 dnů"], (INFO, 2)),
+    # Stejná věta („plnění vyplatí do 15 dnů od skončení šetření“) je i ve
+    # všech třech podmínkách na straně 3 — citace kterékoli je správně
+    # (doplněno 10. 11. 2026, ověřeno v textech).
+    _o("info-vyplata", "Za jak dlouho po vyšetření škody dostanu peníze?", ["15 dnů"],
+       (INFO, 2), (AUTO, 3), (DOM, 3), (CEST, 3)),
     # --- Smlouvy a háčky (likvidace) ---
     _o("benes-dodatek", "Jakou spoluúčast má Tomáš Beneš u havárie od září 2026?", ["5 %", "5 000"], (DOD_1004, 1)),
     _o("benes-dum-spoluucast", "Jaká je spoluúčast u smlouvy 1005?", ["2 000"], (SML_1005, 1)),
-    _o("benes-povoden", "Platí pro dům ze smlouvy 1005 čekací doba u povodně?", ["10 dní"], (SML_1005, 1)),
+    # „v prvních 10 dnech“ je správně taky (10. 11. 2026).
+    _o("benes-povoden", "Platí pro dům ze smlouvy 1005 čekací doba u povodně?", [("10 dní", "10 dnech", "10 dnů")],
+       (SML_1005, 1)),
     # --- Klientka Petra Malá na své smlouvy ---
-    _o("petra-zver", "Mám u svého auta krytý střet se zvěří?", ["PLUS"], (SML_1001, 1), (AUTO, 1), kdo="petra"),
+    # Jen smlouva: podmínky uvádějí obě varianty, kterou má klientka, ví jen
+    # smlouva. S citací podmínek prošla i odpověď „záleží na variantě“
+    # (přísnější od 10. 11. 2026).
+    _o("petra-zver", "Mám u svého auta krytý střet se zvěří?", ["PLUS"], (SML_1001, 1), kdo="petra"),
     _o("petra-povoden", "Platí u mé domácnosti čekací doba u povodně?", [], (SML_1002, 1), kdo="petra"),
     # --- Mimo dokumenty: má říct „nevím“ ---
     {"id": "nevim-povinne-ruceni", "druh": "nevim", "kdo": "likvidace", "otazka": "Kolik stojí povinné ručení?"},

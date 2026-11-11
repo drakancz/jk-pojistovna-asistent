@@ -122,7 +122,10 @@ def test_vytezit_znovu_posle_prepis_se_schematem(prihlas):
     v = stav["vytezeni"]
     assert v["model"] == "claude-haiku-5-5"
     assert v["schema"] and v["prepis"] and v["pokyny"]
-    assert v["thinking"] == {"type": "disabled"}
+    assert v["thinking"] == {"type": "adaptive"}
+    # Limit 16 nepovinných polí ve schématu (Anthropic jinak vrátí 400,
+    # zjištěno naostro 10. 11. 2026) hlídá `vytezeni.pocet_nepovinnych()`;
+    # napodobenina schéma ukládá jen jako ano/ne. TODO: test přes napodobeninu.
     assert v["bloky"] == [{"type": "text", "media_type": None}], "k vytěžení jde jen text, ne obrázek"
 
 

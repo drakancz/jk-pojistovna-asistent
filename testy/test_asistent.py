@@ -28,11 +28,15 @@ def test_odpoved_s_citaci(prihlas):
     page = prihlas("likvidace")
     page.get_by_role("link", name="Asistent", exact=True).click()
     pred = zbyva(page)
+    prevodu_pred = napodobenina("/_posledni")["pocet_prevodu"]
     zeptej_se(page, "Jaká je spoluúčast při odcizení vozidla?")
 
     odpoved = page.locator("#odpoved")
     expect(odpoved).to_contain_text("odpověď napodobeniny")
     expect(odpoved.get_by_role("link", name="zdroj 1")).to_be_visible()
+    # Napodobenina píše Markdown jako skutečný model; stránka ukáže prostý text.
+    expect(odpoved).to_contain_text("Podle dokumentů:")
+    assert "**" not in odpoved.inner_text() and "##" not in odpoved.inner_text()
     # Citovaný zdroj = úryvek, který Claude dostal jako první, i se stránkou.
     zdroj = page.locator("#zdroj-1")
     # Seznam je sbalený (details), proto text_content místo inner_text.
@@ -48,6 +52,10 @@ def test_odpoved_s_citaci(prihlas):
     assert posledni["pokyny"] and posledni["citace"]
     assert len(posledni["uryvky"]) == 8
     assert posledni["uryvky"][0].startswith(dokument)
+    # Před hledáním se otázka převedla do slov dokumentů (stejný malý model).
+    stav = napodobenina("/_posledni")
+    assert stav["pocet_prevodu"] == prevodu_pred + 1
+    assert stav["prevod"]["model"] == "claude-haiku-5-5"
     # Do limitu se otázka započítala.
     assert zbyva(page) == pred - 1
 
